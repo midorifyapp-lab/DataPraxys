@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as FileExchangeRouteImport } from './routes/file-exchange'
 import { Route as AuditLogRouteImport } from './routes/audit-log'
 import { Route as IndexRouteImport } from './routes/index'
@@ -16,6 +17,11 @@ import { Route as CompaniesIndexRouteImport } from './routes/companies.index'
 import { Route as CompaniesNewRouteImport } from './routes/companies.new'
 import { Route as CompaniesIdRouteImport } from './routes/companies.$id'
 
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const FileExchangeRoute = FileExchangeRouteImport.update({
   id: '/file-exchange',
   path: '/file-exchange',
@@ -51,6 +57,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/audit-log': typeof AuditLogRoute
   '/file-exchange': typeof FileExchangeRoute
+  '/settings': typeof SettingsRoute
   '/companies/$id': typeof CompaniesIdRoute
   '/companies/new': typeof CompaniesNewRoute
   '/companies/': typeof CompaniesIndexRoute
@@ -59,6 +66,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/audit-log': typeof AuditLogRoute
   '/file-exchange': typeof FileExchangeRoute
+  '/settings': typeof SettingsRoute
   '/companies/$id': typeof CompaniesIdRoute
   '/companies/new': typeof CompaniesNewRoute
   '/companies': typeof CompaniesIndexRoute
@@ -68,6 +76,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/audit-log': typeof AuditLogRoute
   '/file-exchange': typeof FileExchangeRoute
+  '/settings': typeof SettingsRoute
   '/companies/$id': typeof CompaniesIdRoute
   '/companies/new': typeof CompaniesNewRoute
   '/companies/': typeof CompaniesIndexRoute
@@ -78,6 +87,7 @@ export interface FileRouteTypes {
     | '/'
     | '/audit-log'
     | '/file-exchange'
+    | '/settings'
     | '/companies/$id'
     | '/companies/new'
     | '/companies/'
@@ -86,6 +96,7 @@ export interface FileRouteTypes {
     | '/'
     | '/audit-log'
     | '/file-exchange'
+    | '/settings'
     | '/companies/$id'
     | '/companies/new'
     | '/companies'
@@ -94,6 +105,7 @@ export interface FileRouteTypes {
     | '/'
     | '/audit-log'
     | '/file-exchange'
+    | '/settings'
     | '/companies/$id'
     | '/companies/new'
     | '/companies/'
@@ -103,6 +115,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuditLogRoute: typeof AuditLogRoute
   FileExchangeRoute: typeof FileExchangeRoute
+  SettingsRoute: typeof SettingsRoute
   CompaniesIdRoute: typeof CompaniesIdRoute
   CompaniesNewRoute: typeof CompaniesNewRoute
   CompaniesIndexRoute: typeof CompaniesIndexRoute
@@ -110,6 +123,13 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/file-exchange': {
       id: '/file-exchange'
       path: '/file-exchange'
@@ -159,6 +179,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuditLogRoute: AuditLogRoute,
   FileExchangeRoute: FileExchangeRoute,
+  SettingsRoute: SettingsRoute,
   CompaniesIdRoute: CompaniesIdRoute,
   CompaniesNewRoute: CompaniesNewRoute,
   CompaniesIndexRoute: CompaniesIndexRoute,
