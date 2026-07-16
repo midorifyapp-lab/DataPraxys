@@ -10,6 +10,7 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as MyFilesRouteImport } from './routes/my-files'
 import { Route as FileExchangeRouteImport } from './routes/file-exchange'
 import { Route as AuditLogRouteImport } from './routes/audit-log'
 import { Route as IndexRouteImport } from './routes/index'
@@ -20,6 +21,11 @@ import { Route as CompaniesIdRouteImport } from './routes/companies.$id'
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MyFilesRoute = MyFilesRouteImport.update({
+  id: '/my-files',
+  path: '/my-files',
   getParentRoute: () => rootRouteImport,
 } as any)
 const FileExchangeRoute = FileExchangeRouteImport.update({
@@ -57,6 +63,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/audit-log': typeof AuditLogRoute
   '/file-exchange': typeof FileExchangeRoute
+  '/my-files': typeof MyFilesRoute
   '/settings': typeof SettingsRoute
   '/companies/$id': typeof CompaniesIdRoute
   '/companies/new': typeof CompaniesNewRoute
@@ -66,6 +73,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/audit-log': typeof AuditLogRoute
   '/file-exchange': typeof FileExchangeRoute
+  '/my-files': typeof MyFilesRoute
   '/settings': typeof SettingsRoute
   '/companies/$id': typeof CompaniesIdRoute
   '/companies/new': typeof CompaniesNewRoute
@@ -76,6 +84,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/audit-log': typeof AuditLogRoute
   '/file-exchange': typeof FileExchangeRoute
+  '/my-files': typeof MyFilesRoute
   '/settings': typeof SettingsRoute
   '/companies/$id': typeof CompaniesIdRoute
   '/companies/new': typeof CompaniesNewRoute
@@ -87,6 +96,7 @@ export interface FileRouteTypes {
     | '/'
     | '/audit-log'
     | '/file-exchange'
+    | '/my-files'
     | '/settings'
     | '/companies/$id'
     | '/companies/new'
@@ -96,6 +106,7 @@ export interface FileRouteTypes {
     | '/'
     | '/audit-log'
     | '/file-exchange'
+    | '/my-files'
     | '/settings'
     | '/companies/$id'
     | '/companies/new'
@@ -105,6 +116,7 @@ export interface FileRouteTypes {
     | '/'
     | '/audit-log'
     | '/file-exchange'
+    | '/my-files'
     | '/settings'
     | '/companies/$id'
     | '/companies/new'
@@ -115,6 +127,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuditLogRoute: typeof AuditLogRoute
   FileExchangeRoute: typeof FileExchangeRoute
+  MyFilesRoute: typeof MyFilesRoute
   SettingsRoute: typeof SettingsRoute
   CompaniesIdRoute: typeof CompaniesIdRoute
   CompaniesNewRoute: typeof CompaniesNewRoute
@@ -128,6 +141,13 @@ declare module '@tanstack/react-router' {
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/my-files': {
+      id: '/my-files'
+      path: '/my-files'
+      fullPath: '/my-files'
+      preLoaderRoute: typeof MyFilesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/file-exchange': {
@@ -179,6 +199,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuditLogRoute: AuditLogRoute,
   FileExchangeRoute: FileExchangeRoute,
+  MyFilesRoute: MyFilesRoute,
   SettingsRoute: SettingsRoute,
   CompaniesIdRoute: CompaniesIdRoute,
   CompaniesNewRoute: CompaniesNewRoute,
