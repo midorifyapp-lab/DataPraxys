@@ -22,7 +22,7 @@ interface ActiveFile { name: string; size: number; date: string; status: "availa
 function MyFilesPage() {
   const [drag, setDrag] = useState(false);
   const [file, setFile] = useState<ActiveFile | null>({
-    name: "invoice-nov-2025.pdf",
+    name: "factura-nov-2025.pdf",
     size: 493568,
     date: "2026-07-14 09:12",
     status: "available",
@@ -41,7 +41,7 @@ function MyFilesPage() {
         clearInterval(t);
         setFile({ name: f.name, size: f.size, date: new Date().toISOString().slice(0, 16).replace("T", " "), status: "available" });
         setProgress(0);
-        toast.success("File uploaded successfully");
+        toast.success("Archivo subido correctamente");
       }
     }, 120);
   };
@@ -53,11 +53,11 @@ function MyFilesPage() {
 
   return (
     <AppShell>
-      <PageHeader title="My Files" description="Upload the current file you want to share with the administrator." />
+      <PageHeader title="Mis Archivos" description="Sube el archivo actual que quieres compartir con el administrador." />
 
       <div className="grid gap-6 lg:grid-cols-3">
         <Card className="shadow-soft lg:col-span-2">
-          <CardHeader><CardTitle className="text-base">Upload file</CardTitle></CardHeader>
+          <CardHeader><CardTitle className="text-base">Subir archivo</CardTitle></CardHeader>
           <CardContent>
             <div
               onDragOver={(e) => { e.preventDefault(); setDrag(true); }}
@@ -77,13 +77,13 @@ function MyFilesPage() {
               <div className="h-16 w-16 rounded-full bg-gradient-to-br from-indigo-500 to-purple-600 grid place-items-center mx-auto mb-3 shadow-lifted">
                 <CloudUpload className="h-7 w-7 text-white" />
               </div>
-              <div className="text-base font-semibold">Drop your file here</div>
-              <div className="text-sm text-muted-foreground mt-1">or click to browse — up to 50MB</div>
+              <div className="text-base font-semibold">Arrastra tu archivo aquí</div>
+              <div className="text-sm text-muted-foreground mt-1">o haz clic para explorar — hasta 50MB</div>
               <input ref={inputRef} type="file" className="sr-only" onChange={(e) => e.target.files && handlePick(e.target.files[0])} />
             </div>
             {progress > 0 && (
               <div className="mt-4 space-y-2">
-                <div className="flex justify-between text-xs text-muted-foreground"><span>Uploading...</span><span>{progress}%</span></div>
+                <div className="flex justify-between text-xs text-muted-foreground"><span>Subiendo...</span><span>{progress}%</span></div>
                 <Progress value={progress} />
               </div>
             )}
@@ -93,7 +93,7 @@ function MyFilesPage() {
         <Card className="shadow-soft">
           <CardHeader>
             <CardTitle className="text-base flex items-center gap-2">
-              Current file
+              Archivo actual
               {file && <CheckCircle2 className="h-4 w-4 text-emerald-600" />}
             </CardTitle>
           </CardHeader>
@@ -109,26 +109,26 @@ function MyFilesPage() {
                     </div>
                   </div>
                   <div className="flex items-center justify-between text-xs text-muted-foreground">
-                    <span>Uploaded {file.date}</span>
-                    <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100 capitalize">{file.status}</Badge>
+                    <span>Subido {file.date}</span>
+                    <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100">Disponible</Badge>
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
                   <Button variant="outline" size="sm" onClick={() => inputRef.current?.click()}>
-                    <RefreshCw className="h-4 w-4" /> Replace
+                    <RefreshCw className="h-4 w-4" /> Reemplazar
                   </Button>
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
-                      <Button variant="outline" size="sm" className="text-destructive"><Trash2 className="h-4 w-4" /> Delete</Button>
+                      <Button variant="outline" size="sm" className="text-destructive"><Trash2 className="h-4 w-4" /> Eliminar</Button>
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
-                        <AlertDialogTitle>Delete this file?</AlertDialogTitle>
-                        <AlertDialogDescription>The administrator will no longer see this file.</AlertDialogDescription>
+                        <AlertDialogTitle>¿Eliminar este archivo?</AlertDialogTitle>
+                        <AlertDialogDescription>El administrador ya no podrá ver este archivo.</AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
-                        <AlertDialogCancel>Cancel</AlertDialogCancel>
-                        <AlertDialogAction onClick={() => { setFile(null); toast.success("File deleted"); }}>Delete</AlertDialogAction>
+                        <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                        <AlertDialogAction onClick={() => { setFile(null); toast.success("Archivo eliminado"); }}>Eliminar</AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog>
@@ -137,7 +137,7 @@ function MyFilesPage() {
             ) : (
               <div className="text-center py-10 text-sm text-muted-foreground">
                 <Upload className="h-10 w-10 mx-auto mb-2 opacity-40" />
-                No active file
+                Sin archivo activo
               </div>
             )}
           </CardContent>
@@ -147,15 +147,15 @@ function MyFilesPage() {
       <AlertDialog open={!!pendingReplace} onOpenChange={(o) => !o && setPendingReplace(null)}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Replace current file?</AlertDialogTitle>
+            <AlertDialogTitle>¿Reemplazar el archivo actual?</AlertDialogTitle>
             <AlertDialogDescription>
-              Only one active file is allowed. Uploading <span className="font-medium">{pendingReplace?.name}</span> will replace your current file.
+              Solo se permite un archivo activo. Subir <span className="font-medium">{pendingReplace?.name}</span> reemplazará tu archivo actual.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogCancel>Cancelar</AlertDialogCancel>
             <AlertDialogAction onClick={() => { if (pendingReplace) startUpload(pendingReplace); setPendingReplace(null); }}>
-              Replace
+              Reemplazar
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>

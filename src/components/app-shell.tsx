@@ -38,17 +38,17 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 const adminNav = [
-  { to: "/", label: "Dashboard", icon: LayoutDashboard, exact: true },
-  { to: "/companies", label: "Companies", icon: Building2 },
-  { to: "/file-exchange", label: "File Exchange", icon: ArrowLeftRight },
-  { to: "/audit-log", label: "Audit Log", icon: ScrollText },
-  { to: "/settings", label: "Settings", icon: Settings },
+  { to: "/", label: "Panel", icon: LayoutDashboard, exact: true },
+  { to: "/companies", label: "Empresas", icon: Building2 },
+  { to: "/file-exchange", label: "Intercambio de Archivos", icon: ArrowLeftRight },
+  { to: "/audit-log", label: "Registro de Auditoría", icon: ScrollText },
+  { to: "/settings", label: "Configuración", icon: Settings },
 ];
 
 const companyNav = [
-  { to: "/", label: "Home", icon: Home, exact: true },
-  { to: "/my-files", label: "My Files", icon: FolderUp },
-  { to: "/profile", label: "Profile", icon: UserCircle },
+  { to: "/", label: "Inicio", icon: Home, exact: true },
+  { to: "/my-files", label: "Mis Archivos", icon: FolderUp },
+  { to: "/profile", label: "Perfil", icon: UserCircle },
 ];
 
 function SidebarContent({ compact = false }: { compact?: boolean }) {
@@ -68,7 +68,7 @@ function SidebarContent({ compact = false }: { compact?: boolean }) {
         <div className="leading-tight">
           <div className="text-sm font-semibold text-sidebar-foreground">Exchange</div>
           <div className="text-[11px] text-muted-foreground">
-            {role === "admin" ? "Admin console" : "Company portal"}
+            {role === "admin" ? "Consola de administración" : "Portal de empresa"}
           </div>
         </div>
       </div>
@@ -96,10 +96,10 @@ function SidebarContent({ compact = false }: { compact?: boolean }) {
       <div className="p-3 border-t border-sidebar-border">
         <div className="rounded-xl bg-gradient-to-br from-indigo-50 to-purple-50 p-3 text-xs text-slate-700">
           <div className="font-semibold mb-1 flex items-center gap-1.5">
-            <Shield className="h-3.5 w-3.5" /> Secure transfer
+            <Shield className="h-3.5 w-3.5" /> Transferencia segura
           </div>
           <p className="text-slate-600 leading-relaxed">
-            All files are encrypted end-to-end and audit-logged.
+            Todos los archivos están cifrados de extremo a extremo y auditados.
           </p>
         </div>
       </div>
@@ -131,7 +131,7 @@ function Topbar() {
           <Input
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            placeholder="Search companies, files..."
+            placeholder="Buscar empresas, archivos..."
             className="pl-9 bg-muted/40 border-transparent focus-visible:bg-background"
           />
         </div>
@@ -142,18 +142,18 @@ function Topbar() {
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="sm" className="gap-1.5 rounded-full">
               {role === "admin" ? (
-                <><Shield className="h-3.5 w-3.5" /> Admin view</>
+                <><Shield className="h-3.5 w-3.5" /> Vista admin</>
               ) : (
-                <><Building2 className="h-3.5 w-3.5" /> Company view</>
+                <><Building2 className="h-3.5 w-3.5" /> Vista empresa</>
               )}
               <ChevronDown className="h-3.5 w-3.5 opacity-60" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-52">
-            <DropdownMenuLabel>Preview role</DropdownMenuLabel>
+            <DropdownMenuLabel>Previsualizar rol</DropdownMenuLabel>
             <DropdownMenuRadioGroup value={role} onValueChange={(v) => setRole(v as "admin" | "company")}>
-              <DropdownMenuRadioItem value="admin">Administrator</DropdownMenuRadioItem>
-              <DropdownMenuRadioItem value="company">Company user</DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value="admin">Administrador</DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value="company">Usuario de empresa</DropdownMenuRadioItem>
             </DropdownMenuRadioGroup>
           </DropdownMenuContent>
         </DropdownMenu>
@@ -170,11 +170,11 @@ function Topbar() {
           <PopoverContent align="end" className="w-96 p-0">
             <div className="flex items-center justify-between p-4 border-b">
               <div>
-                <div className="text-sm font-semibold">Notifications</div>
-                <div className="text-xs text-muted-foreground">{unread} unread</div>
+                <div className="text-sm font-semibold">Notificaciones</div>
+                <div className="text-xs text-muted-foreground">{unread} sin leer</div>
               </div>
               <Button variant="ghost" size="sm" onClick={markAllRead}>
-                Mark all read
+                Marcar todas como leídas
               </Button>
             </div>
             <ScrollArea className="h-80">
@@ -203,21 +203,21 @@ function Topbar() {
                 </AvatarFallback>
               </Avatar>
               <div className="hidden md:block text-left leading-tight">
-                <div className="text-sm font-medium">{role === "admin" ? "Alex Diaz" : "Juan Perez"}</div>
+                <div className="text-sm font-medium">{role === "admin" ? "Alex Díaz" : "Juan Pérez"}</div>
                 <div className="text-[11px] text-muted-foreground">
-                  {role === "admin" ? "Administrator" : "Northwind Trading"}
+                  {role === "admin" ? "Administrador" : "Northwind Trading"}
                 </div>
               </div>
               <ChevronDown className="h-3.5 w-3.5 opacity-60" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-48">
-            <DropdownMenuLabel>My account</DropdownMenuLabel>
+            <DropdownMenuLabel>Mi cuenta</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem><UserCog className="mr-2 h-4 w-4" /> Profile</DropdownMenuItem>
-            <DropdownMenuItem><Settings className="mr-2 h-4 w-4" /> Settings</DropdownMenuItem>
+            <DropdownMenuItem><UserCog className="mr-2 h-4 w-4" /> Perfil</DropdownMenuItem>
+            <DropdownMenuItem><Settings className="mr-2 h-4 w-4" /> Configuración</DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem><LogOut className="mr-2 h-4 w-4" /> Sign out</DropdownMenuItem>
+            <DropdownMenuItem><LogOut className="mr-2 h-4 w-4" /> Cerrar sesión</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

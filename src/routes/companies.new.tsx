@@ -21,7 +21,7 @@ function NewCompanyPage() {
     setSaving(true);
     setTimeout(() => {
       setSaving(false);
-      toast.success("Company created");
+      toast.success("Empresa creada");
       navigate({ to: "/companies" });
     }, 600);
   };
@@ -30,42 +30,42 @@ function NewCompanyPage() {
     <AppShell>
       <div className="mb-4">
         <Button asChild variant="ghost" size="sm">
-          <Link to="/companies"><ArrowLeft className="h-4 w-4" /> Back to companies</Link>
+          <Link to="/companies"><ArrowLeft className="h-4 w-4" /> Volver a empresas</Link>
         </Button>
       </div>
-      <PageHeader title="New company" description="Onboard a new partner company and its primary user." />
+      <PageHeader title="Nueva empresa" description="Incorpora una nueva empresa socia y su usuario principal." />
 
       <form onSubmit={submit} className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2 space-y-6">
           <Card className="shadow-soft">
-            <CardHeader><CardTitle className="text-base">Company details</CardTitle></CardHeader>
+            <CardHeader><CardTitle className="text-base">Datos de la empresa</CardTitle></CardHeader>
             <CardContent className="grid gap-4 sm:grid-cols-2">
-              <Field label="Company name" required><Input placeholder="Acme Global" /></Field>
+              <Field label="Nombre de la empresa" required><Input placeholder="Acme Global" /></Field>
               <Field label="RUC" required><Input placeholder="20512345678" /></Field>
             </CardContent>
           </Card>
 
           <Card className="shadow-soft">
-            <CardHeader><CardTitle className="text-base">Primary user</CardTitle></CardHeader>
+            <CardHeader><CardTitle className="text-base">Usuario principal</CardTitle></CardHeader>
             <CardContent className="grid gap-4 sm:grid-cols-2">
-              <Field label="Username" required><Input placeholder="jperez" /></Field>
-              <Field label="Email" required><Input type="email" placeholder="j.perez@company.com" /></Field>
-              <Field label="Position"><Input placeholder="Finance Manager" /></Field>
-              <Field label="Password" required><Input type="password" placeholder="••••••••" /></Field>
+              <Field label="Usuario" required><Input placeholder="jperez" /></Field>
+              <Field label="Email" required><Input type="email" placeholder="j.perez@empresa.com" /></Field>
+              <Field label="Cargo"><Input placeholder="Gerente de Finanzas" /></Field>
+              <Field label="Contraseña" required><Input type="password" placeholder="••••••••" /></Field>
             </CardContent>
           </Card>
         </div>
 
         <div className="space-y-6">
           <Card className="shadow-soft">
-            <CardHeader><CardTitle className="text-base">Company logo</CardTitle></CardHeader>
+            <CardHeader><CardTitle className="text-base">Logo de la empresa</CardTitle></CardHeader>
             <CardContent>
               <label className="flex flex-col items-center justify-center gap-2 border-2 border-dashed rounded-xl p-8 cursor-pointer hover:bg-muted/30 transition-colors">
                 <div className="h-14 w-14 rounded-full bg-indigo-50 grid place-items-center">
                   <ImagePlus className="h-6 w-6 text-indigo-600" />
                 </div>
-                <div className="text-sm font-medium">Upload logo</div>
-                <div className="text-xs text-muted-foreground">PNG or JPG · up to 2MB</div>
+                <div className="text-sm font-medium">Subir logo</div>
+                <div className="text-xs text-muted-foreground">PNG o JPG · hasta 2MB</div>
                 <input type="file" accept="image/*" className="sr-only" />
               </label>
             </CardContent>
@@ -73,8 +73,8 @@ function NewCompanyPage() {
 
           <Card className="shadow-soft">
             <CardContent className="p-4 flex flex-col gap-2">
-              <Button type="submit" disabled={saving}>{saving ? "Creating..." : "Create company"}</Button>
-              <Button type="button" variant="outline" onClick={() => navigate({ to: "/companies" })}>Cancel</Button>
+              <Button type="submit" disabled={saving}>{saving ? "Creando..." : "Crear empresa"}</Button>
+              <Button type="button" variant="outline" onClick={() => navigate({ to: "/companies" })}>Cancelar</Button>
             </CardContent>
           </Card>
         </div>

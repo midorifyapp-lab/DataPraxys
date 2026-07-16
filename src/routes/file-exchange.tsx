@@ -3,7 +3,6 @@ import { AppShell, PageHeader, CompanyLogo } from "@/components/app-shell";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Badge } from "@/components/ui/badge";
 import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from "@/components/ui/table";
@@ -35,29 +34,29 @@ function FileExchange() {
 
   return (
     <AppShell>
-      <PageHeader title="File Exchange" description="Every file sent to or received from partner companies." />
+      <PageHeader title="Intercambio de Archivos" description="Todos los archivos enviados y recibidos entre tus empresas socias." />
 
       <Card className="shadow-soft">
         <div className="p-4 flex flex-col md:flex-row gap-3 border-b">
           <div className="relative flex-1 max-w-sm">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search files or companies..." className="pl-9" />
+            <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Buscar archivos o empresas..." className="pl-9" />
           </div>
           <Select value={company} onValueChange={setCompany}>
-            <SelectTrigger className="w-48"><SelectValue placeholder="Company" /></SelectTrigger>
+            <SelectTrigger className="w-48"><SelectValue placeholder="Empresa" /></SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All companies</SelectItem>
+              <SelectItem value="all">Todas las empresas</SelectItem>
               {companies.map((c) => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}
             </SelectContent>
           </Select>
           <Select value={status} onValueChange={setStatus}>
-            <SelectTrigger className="w-40"><SelectValue placeholder="Status" /></SelectTrigger>
+            <SelectTrigger className="w-40"><SelectValue placeholder="Estado" /></SelectTrigger>
             <SelectContent>
-              <SelectItem value="all">All statuses</SelectItem>
-              <SelectItem value="pending">Pending</SelectItem>
-              <SelectItem value="available">Available</SelectItem>
-              <SelectItem value="downloaded">Downloaded</SelectItem>
-              <SelectItem value="deleted">Deleted</SelectItem>
+              <SelectItem value="all">Todos los estados</SelectItem>
+              <SelectItem value="pending">Pendiente</SelectItem>
+              <SelectItem value="available">Disponible</SelectItem>
+              <SelectItem value="downloaded">Descargado</SelectItem>
+              <SelectItem value="deleted">Eliminado</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -65,12 +64,12 @@ function FileExchange() {
           <Table>
             <TableHeader>
               <TableRow className="bg-muted/40 hover:bg-muted/40">
-                <TableHead>Company</TableHead>
-                <TableHead>Direction</TableHead>
-                <TableHead>Filename</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Sent</TableHead>
-                <TableHead>Downloaded</TableHead>
+                <TableHead>Empresa</TableHead>
+                <TableHead>Dirección</TableHead>
+                <TableHead>Archivo</TableHead>
+                <TableHead>Estado</TableHead>
+                <TableHead>Enviado</TableHead>
+                <TableHead>Descargado</TableHead>
                 <TableHead className="w-16"></TableHead>
               </TableRow>
             </TableHeader>
@@ -91,8 +90,8 @@ function FileExchange() {
                         f.direction === "received" ? "text-emerald-600" : "text-indigo-600",
                       )}>
                         {f.direction === "received"
-                          ? <><ArrowDownLeft className="h-3 w-3" /> Received</>
-                          : <><ArrowUpRight className="h-3 w-3" /> Sent</>}
+                          ? <><ArrowDownLeft className="h-3 w-3" /> Recibido</>
+                          : <><ArrowUpRight className="h-3 w-3" /> Enviado</>}
                       </div>
                     </TableCell>
                     <TableCell className="font-medium text-sm">{f.filename}</TableCell>
@@ -106,7 +105,7 @@ function FileExchange() {
                 );
               })}
               {filtered.length === 0 && (
-                <TableRow><TableCell colSpan={7} className="text-center py-12 text-sm text-muted-foreground">No files match.</TableCell></TableRow>
+                <TableRow><TableCell colSpan={7} className="text-center py-12 text-sm text-muted-foreground">No se encontraron archivos.</TableCell></TableRow>
               )}
             </TableBody>
           </Table>

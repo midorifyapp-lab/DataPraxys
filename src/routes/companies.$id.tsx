@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { AppShell, PageHeader, CompanyLogo } from "@/components/app-shell";
+import { AppShell, CompanyLogo } from "@/components/app-shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -22,7 +22,7 @@ export const Route = createFileRoute("/companies/$id")({
   },
   component: CompanyDetail,
   notFoundComponent: () => (
-    <AppShell><div className="text-center py-24 text-muted-foreground">Company not found.</div></AppShell>
+    <AppShell><div className="text-center py-24 text-muted-foreground">Empresa no encontrada.</div></AppShell>
   ),
 });
 
@@ -35,7 +35,7 @@ function CompanyDetail() {
     <AppShell>
       <div className="mb-4">
         <Button asChild variant="ghost" size="sm">
-          <Link to="/companies"><ArrowLeft className="h-4 w-4" /> Back</Link>
+          <Link to="/companies"><ArrowLeft className="h-4 w-4" /> Volver</Link>
         </Button>
       </div>
 
@@ -47,27 +47,26 @@ function CompanyDetail() {
               <div className="flex items-center gap-2 flex-wrap">
                 <h1 className="text-xl md:text-2xl font-semibold">{company.name}</h1>
                 <Badge className={cn(
-                  "capitalize",
                   company.status === "active"
                     ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-100"
                     : "bg-slate-200 text-slate-600 hover:bg-slate-200",
-                )}>{company.status}</Badge>
+                )}>{company.status === "active" ? "Activa" : "Inactiva"}</Badge>
               </div>
               <div className="text-sm text-muted-foreground mt-1">
                 RUC {company.ruc} · {company.email} · {company.position}
               </div>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline">Edit</Button>
-              <Button variant="outline" className="text-destructive">Delete</Button>
+              <Button variant="outline">Editar</Button>
+              <Button variant="outline" className="text-destructive">Eliminar</Button>
             </div>
           </div>
         </CardContent>
       </Card>
 
       <div className="grid gap-6 lg:grid-cols-3">
-        <FileCard title="Latest file received" file={received} tone="indigo" />
-        <FileCard title="Latest file sent" file={sent} tone="emerald" />
+        <FileCard title="Último archivo recibido" file={received} tone="indigo" />
+        <FileCard title="Último archivo enviado" file={sent} tone="emerald" />
         <UploadCard />
       </div>
     </AppShell>
@@ -95,21 +94,21 @@ function FileCard({ title, file, tone }: { title: string; file?: any; tone: stri
               </div>
             </div>
             <div className="grid grid-cols-2 gap-2">
-              <Button size="sm" variant="outline" onClick={() => toast.success("Download started")}>
-                <Download className="h-4 w-4" /> Download
+              <Button size="sm" variant="outline" onClick={() => toast.success("Descarga iniciada")}>
+                <Download className="h-4 w-4" /> Descargar
               </Button>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <Button size="sm" variant="outline" className="text-destructive"><Trash2 className="h-4 w-4" /> Delete</Button>
+                  <Button size="sm" variant="outline" className="text-destructive"><Trash2 className="h-4 w-4" /> Eliminar</Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
-                    <AlertDialogTitle>Delete this file?</AlertDialogTitle>
-                    <AlertDialogDescription>The file will be permanently removed.</AlertDialogDescription>
+                    <AlertDialogTitle>¿Eliminar este archivo?</AlertDialogTitle>
+                    <AlertDialogDescription>El archivo se eliminará permanentemente.</AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
-                    <AlertDialogCancel>Cancel</AlertDialogCancel>
-                    <AlertDialogAction onClick={() => toast.success("File deleted")}>Delete</AlertDialogAction>
+                    <AlertDialogCancel>Cancelar</AlertDialogCancel>
+                    <AlertDialogAction onClick={() => toast.success("Archivo eliminado")}>Eliminar</AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
@@ -118,7 +117,7 @@ function FileCard({ title, file, tone }: { title: string; file?: any; tone: stri
         ) : (
           <div className="text-center py-8 text-sm text-muted-foreground">
             <FileText className="h-10 w-10 mx-auto mb-2 opacity-40" />
-            No file yet
+            Sin archivos aún
           </div>
         )}
       </CardContent>
@@ -148,14 +147,14 @@ function UploadCard() {
       if (p >= 100) {
         clearInterval(t);
         setDone(true);
-        toast.success("File uploaded successfully");
+        toast.success("Archivo subido correctamente");
       }
     }, 150);
   };
 
   return (
     <Card className="shadow-soft">
-      <CardHeader><CardTitle className="text-base">Send new file</CardTitle></CardHeader>
+      <CardHeader><CardTitle className="text-base">Enviar nuevo archivo</CardTitle></CardHeader>
       <CardContent>
         <div
           onDragOver={(e) => { e.preventDefault(); setDrag(true); }}
@@ -175,8 +174,8 @@ function UploadCard() {
           <div className="h-12 w-12 rounded-full bg-indigo-50 grid place-items-center mx-auto mb-2">
             <CloudUpload className="h-6 w-6 text-indigo-600" />
           </div>
-          <div className="text-sm font-medium">Drop file here or click to browse</div>
-          <div className="text-xs text-muted-foreground mt-1">Up to 50MB per file</div>
+          <div className="text-sm font-medium">Arrastra un archivo o haz clic para explorar</div>
+          <div className="text-xs text-muted-foreground mt-1">Hasta 50MB por archivo</div>
           <input ref={inputRef} type="file" className="sr-only" onChange={(e) => e.target.files && pick(e.target.files[0])} />
         </div>
 
@@ -192,7 +191,7 @@ function UploadCard() {
             </div>
             {progress > 0 && <Progress value={progress} />}
             <Button className="w-full" onClick={upload} disabled={progress > 0 && !done}>
-              <Upload className="h-4 w-4" /> {done ? "Upload another" : "Upload"}
+              <Upload className="h-4 w-4" /> {done ? "Subir otro" : "Subir"}
             </Button>
           </div>
         )}
