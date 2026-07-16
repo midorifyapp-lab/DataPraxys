@@ -12,6 +12,7 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as CompaniesIndexRouteImport } from './routes/companies.index'
 import { Route as CompaniesNewRouteImport } from './routes/companies.new'
+import { Route as CompaniesIdRouteImport } from './routes/companies.$id'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -28,33 +29,42 @@ const CompaniesNewRoute = CompaniesNewRouteImport.update({
   path: '/companies/new',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CompaniesIdRoute = CompaniesIdRouteImport.update({
+  id: '/companies/$id',
+  path: '/companies/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/companies/$id': typeof CompaniesIdRoute
   '/companies/new': typeof CompaniesNewRoute
   '/companies/': typeof CompaniesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/companies/$id': typeof CompaniesIdRoute
   '/companies/new': typeof CompaniesNewRoute
   '/companies': typeof CompaniesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/companies/$id': typeof CompaniesIdRoute
   '/companies/new': typeof CompaniesNewRoute
   '/companies/': typeof CompaniesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/companies/new' | '/companies/'
+  fullPaths: '/' | '/companies/$id' | '/companies/new' | '/companies/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/companies/new' | '/companies'
-  id: '__root__' | '/' | '/companies/new' | '/companies/'
+  to: '/' | '/companies/$id' | '/companies/new' | '/companies'
+  id: '__root__' | '/' | '/companies/$id' | '/companies/new' | '/companies/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CompaniesIdRoute: typeof CompaniesIdRoute
   CompaniesNewRoute: typeof CompaniesNewRoute
   CompaniesIndexRoute: typeof CompaniesIndexRoute
 }
@@ -82,11 +92,19 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CompaniesNewRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/companies/$id': {
+      id: '/companies/$id'
+      path: '/companies/$id'
+      fullPath: '/companies/$id'
+      preLoaderRoute: typeof CompaniesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CompaniesIdRoute: CompaniesIdRoute,
   CompaniesNewRoute: CompaniesNewRoute,
   CompaniesIndexRoute: CompaniesIndexRoute,
 }
