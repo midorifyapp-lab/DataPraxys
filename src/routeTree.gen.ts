@@ -9,38 +9,181 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as MyFilesRouteImport } from './routes/my-files'
+import { Route as FileExchangeRouteImport } from './routes/file-exchange'
+import { Route as AuditLogRouteImport } from './routes/audit-log'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as CompaniesIndexRouteImport } from './routes/companies.index'
+import { Route as CompaniesNewRouteImport } from './routes/companies.new'
+import { Route as CompaniesIdRouteImport } from './routes/companies.$id'
 
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MyFilesRoute = MyFilesRouteImport.update({
+  id: '/my-files',
+  path: '/my-files',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FileExchangeRoute = FileExchangeRouteImport.update({
+  id: '/file-exchange',
+  path: '/file-exchange',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuditLogRoute = AuditLogRouteImport.update({
+  id: '/audit-log',
+  path: '/audit-log',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const CompaniesIndexRoute = CompaniesIndexRouteImport.update({
+  id: '/companies/',
+  path: '/companies/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompaniesNewRoute = CompaniesNewRouteImport.update({
+  id: '/companies/new',
+  path: '/companies/new',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompaniesIdRoute = CompaniesIdRouteImport.update({
+  id: '/companies/$id',
+  path: '/companies/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/audit-log': typeof AuditLogRoute
+  '/file-exchange': typeof FileExchangeRoute
+  '/my-files': typeof MyFilesRoute
+  '/profile': typeof ProfileRoute
+  '/settings': typeof SettingsRoute
+  '/companies/$id': typeof CompaniesIdRoute
+  '/companies/new': typeof CompaniesNewRoute
+  '/companies/': typeof CompaniesIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/audit-log': typeof AuditLogRoute
+  '/file-exchange': typeof FileExchangeRoute
+  '/my-files': typeof MyFilesRoute
+  '/profile': typeof ProfileRoute
+  '/settings': typeof SettingsRoute
+  '/companies/$id': typeof CompaniesIdRoute
+  '/companies/new': typeof CompaniesNewRoute
+  '/companies': typeof CompaniesIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/audit-log': typeof AuditLogRoute
+  '/file-exchange': typeof FileExchangeRoute
+  '/my-files': typeof MyFilesRoute
+  '/profile': typeof ProfileRoute
+  '/settings': typeof SettingsRoute
+  '/companies/$id': typeof CompaniesIdRoute
+  '/companies/new': typeof CompaniesNewRoute
+  '/companies/': typeof CompaniesIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/audit-log'
+    | '/file-exchange'
+    | '/my-files'
+    | '/profile'
+    | '/settings'
+    | '/companies/$id'
+    | '/companies/new'
+    | '/companies/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/audit-log'
+    | '/file-exchange'
+    | '/my-files'
+    | '/profile'
+    | '/settings'
+    | '/companies/$id'
+    | '/companies/new'
+    | '/companies'
+  id:
+    | '__root__'
+    | '/'
+    | '/audit-log'
+    | '/file-exchange'
+    | '/my-files'
+    | '/profile'
+    | '/settings'
+    | '/companies/$id'
+    | '/companies/new'
+    | '/companies/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuditLogRoute: typeof AuditLogRoute
+  FileExchangeRoute: typeof FileExchangeRoute
+  MyFilesRoute: typeof MyFilesRoute
+  ProfileRoute: typeof ProfileRoute
+  SettingsRoute: typeof SettingsRoute
+  CompaniesIdRoute: typeof CompaniesIdRoute
+  CompaniesNewRoute: typeof CompaniesNewRoute
+  CompaniesIndexRoute: typeof CompaniesIndexRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/my-files': {
+      id: '/my-files'
+      path: '/my-files'
+      fullPath: '/my-files'
+      preLoaderRoute: typeof MyFilesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/file-exchange': {
+      id: '/file-exchange'
+      path: '/file-exchange'
+      fullPath: '/file-exchange'
+      preLoaderRoute: typeof FileExchangeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/audit-log': {
+      id: '/audit-log'
+      path: '/audit-log'
+      fullPath: '/audit-log'
+      preLoaderRoute: typeof AuditLogRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -48,22 +191,41 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/companies/': {
+      id: '/companies/'
+      path: '/companies'
+      fullPath: '/companies/'
+      preLoaderRoute: typeof CompaniesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/companies/new': {
+      id: '/companies/new'
+      path: '/companies/new'
+      fullPath: '/companies/new'
+      preLoaderRoute: typeof CompaniesNewRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/companies/$id': {
+      id: '/companies/$id'
+      path: '/companies/$id'
+      fullPath: '/companies/$id'
+      preLoaderRoute: typeof CompaniesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuditLogRoute: AuditLogRoute,
+  FileExchangeRoute: FileExchangeRoute,
+  MyFilesRoute: MyFilesRoute,
+  ProfileRoute: ProfileRoute,
+  SettingsRoute: SettingsRoute,
+  CompaniesIdRoute: CompaniesIdRoute,
+  CompaniesNewRoute: CompaniesNewRoute,
+  CompaniesIndexRoute: CompaniesIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
-
-import type { getRouter } from './router.tsx'
-import type { startInstance } from './start.ts'
-declare module '@tanstack/react-start' {
-  interface Register {
-    ssr: true
-    router: Awaited<ReturnType<typeof getRouter>>
-    config: Awaited<ReturnType<typeof startInstance.getOptions>>
-  }
-}

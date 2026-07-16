@@ -1,0 +1,280 @@
+import { Link, useRouterState } from "@tanstack/react-router";
+import { useState, type ReactNode } from "react";
+import {
+  LayoutDashboard,
+  Building2,
+  ArrowLeftRight,
+  ScrollText,
+  Settings,
+  Home,
+  FolderUp,
+  UserCircle,
+  Bell,
+  Search,
+  ChevronDown,
+  LogOut,
+  UserCog,
+  Shield,
+  Menu,
+} from "lucide-react";
+import { useApp } from "@/lib/app-state";
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+  DropdownMenuRadioGroup,
+  DropdownMenuRadioItem,
+} from "@/components/ui/dropdown-menu";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+
+const adminNav = [
+  { to: "/", label: "Dashboard", icon: LayoutDashboard, exact: true },
+  { to: "/companies", label: "Companies", icon: Building2 },
+  { to: "/file-exchange", label: "File Exchange", icon: ArrowLeftRight },
+  { to: "/audit-log", label: "Audit Log", icon: ScrollText },
+  { to: "/settings", label: "Settings", icon: Settings },
+];
+
+const companyNav = [
+  { to: "/", label: "Home", icon: Home, exact: true },
+  { to: "/my-files", label: "My Files", icon: FolderUp },
+  { to: "/profile", label: "Profile", icon: UserCircle },
+];
+
+function SidebarContent({ compact = false }: { compact?: boolean }) {
+  const { role } = useApp();
+  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const nav = role === "admin" ? adminNav : companyNav;
+
+  const isActive = (to: string, exact?: boolean) =>
+    exact ? pathname === to : pathname === to || pathname.startsWith(to + "/");
+
+  return (
+    <div className="flex h-full flex-col">
+      <div className="flex h-16 items-center gap-2 px-5 border-b border-sidebar-border">
+        <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 grid place-items-center text-white font-semibold shadow-soft">
+          Ex
+        </div>
+        <div className="leading-tight">
+          <div className="text-sm font-semibold text-sidebar-foreground">Exchange</div>
+          <div className="text-[11px] text-muted-foreground">
+            {role === "admin" ? "Admin console" : "Company portal"}
+          </div>
+        </div>
+      </div>
+      <nav className={cn("flex-1 p-3 space-y-1", compact && "px-2")}>
+        {nav.map((item) => {
+          const Icon = item.icon;
+          const active = isActive(item.to, item.exact);
+          return (
+            <Link
+              key={item.to}
+              to={item.to}
+              className={cn(
+                "group flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors",
+                active
+                  ? "bg-sidebar-accent text-sidebar-accent-foreground shadow-soft"
+                  : "text-sidebar-foreground/80 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground",
+              )}
+            >
+              <Icon className={cn("h-4 w-4", active ? "text-indigo-600" : "text-muted-foreground")} />
+              <span>{item.label}</span>
+            </Link>
+          );
+        })}
+      </nav>
+      <div className="p-3 border-t border-sidebar-border">
+        <div className="rounded-xl bg-gradient-to-br from-indigo-50 to-purple-50 p-3 text-xs text-slate-700">
+          <div className="font-semibold mb-1 flex items-center gap-1.5">
+            <Shield className="h-3.5 w-3.5" /> Secure transfer
+          </div>
+          <p className="text-slate-600 leading-relaxed">
+            All files are encrypted end-to-end and audit-logged.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Topbar() {
+  const { role, setRole, notifications, markAllRead } = useApp();
+  const unread = notifications.filter((n) => !n.read).length;
+  const [q, setQ] = useState("");
+
+  return (
+    <header className="sticky top-0 z-30 h-16 border-b bg-background/80 backdrop-blur">
+      <div className="flex h-full items-center gap-3 px-4 md:px-6">
+        <Sheet>
+          <SheetTrigger asChild>
+            <Button variant="ghost" size="icon" className="md:hidden">
+              <Menu className="h-5 w-5" />
+            </Button>
+          </SheetTrigger>
+          <SheetContent side="left" className="p-0 w-72">
+            <SidebarContent />
+          </SheetContent>
+        </Sheet>
+
+        <div className="relative w-full max-w-md hidden sm:block">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+          <Input
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="Search companies, files..."
+            className="pl-9 bg-muted/40 border-transparent focus-visible:bg-background"
+          />
+        </div>
+
+        <div className="flex-1" />
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="sm" className="gap-1.5 rounded-full">
+              {role === "admin" ? (
+                <><Shield className="h-3.5 w-3.5" /> Admin view</>
+              ) : (
+                <><Building2 className="h-3.5 w-3.5" /> Company view</>
+              )}
+              <ChevronDown className="h-3.5 w-3.5 opacity-60" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-52">
+            <DropdownMenuLabel>Preview role</DropdownMenuLabel>
+            <DropdownMenuRadioGroup value={role} onValueChange={(v) => setRole(v as "admin" | "company")}>
+              <DropdownMenuRadioItem value="admin">Administrator</DropdownMenuRadioItem>
+              <DropdownMenuRadioItem value="company">Company user</DropdownMenuRadioItem>
+            </DropdownMenuRadioGroup>
+          </DropdownMenuContent>
+        </DropdownMenu>
+
+        <Popover>
+          <PopoverTrigger asChild>
+            <Button variant="ghost" size="icon" className="relative">
+              <Bell className="h-5 w-5" />
+              {unread > 0 && (
+                <span className="absolute top-2 right-2 h-2 w-2 rounded-full bg-indigo-500 ring-2 ring-background" />
+              )}
+            </Button>
+          </PopoverTrigger>
+          <PopoverContent align="end" className="w-96 p-0">
+            <div className="flex items-center justify-between p-4 border-b">
+              <div>
+                <div className="text-sm font-semibold">Notifications</div>
+                <div className="text-xs text-muted-foreground">{unread} unread</div>
+              </div>
+              <Button variant="ghost" size="sm" onClick={markAllRead}>
+                Mark all read
+              </Button>
+            </div>
+            <ScrollArea className="h-80">
+              <div className="divide-y">
+                {notifications.map((n) => (
+                  <div key={n.id} className="p-4 flex gap-3 hover:bg-muted/40">
+                    <div className={cn("mt-1 h-2 w-2 rounded-full shrink-0", n.read ? "bg-muted" : "bg-indigo-500")} />
+                    <div className="min-w-0">
+                      <div className="text-sm font-medium truncate">{n.title}</div>
+                      <div className="text-xs text-muted-foreground">{n.description}</div>
+                      <div className="text-[11px] text-muted-foreground mt-0.5">{n.time}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </ScrollArea>
+          </PopoverContent>
+        </Popover>
+
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="ghost" className="gap-2 px-2">
+              <Avatar className="h-8 w-8">
+                <AvatarFallback className="bg-gradient-to-br from-indigo-500 to-purple-600 text-white text-xs font-semibold">
+                  {role === "admin" ? "AD" : "JP"}
+                </AvatarFallback>
+              </Avatar>
+              <div className="hidden md:block text-left leading-tight">
+                <div className="text-sm font-medium">{role === "admin" ? "Alex Diaz" : "Juan Perez"}</div>
+                <div className="text-[11px] text-muted-foreground">
+                  {role === "admin" ? "Administrator" : "Northwind Trading"}
+                </div>
+              </div>
+              <ChevronDown className="h-3.5 w-3.5 opacity-60" />
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" className="w-48">
+            <DropdownMenuLabel>My account</DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem><UserCog className="mr-2 h-4 w-4" /> Profile</DropdownMenuItem>
+            <DropdownMenuItem><Settings className="mr-2 h-4 w-4" /> Settings</DropdownMenuItem>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem><LogOut className="mr-2 h-4 w-4" /> Sign out</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+    </header>
+  );
+}
+
+export function AppShell({ children }: { children: ReactNode }) {
+  return (
+    <div className="min-h-screen bg-background">
+      <aside className="hidden md:flex fixed inset-y-0 left-0 w-64 border-r border-sidebar-border bg-sidebar">
+        <SidebarContent />
+      </aside>
+      <div className="md:pl-64">
+        <Topbar />
+        <main className="p-4 md:p-8 max-w-[1400px] mx-auto">{children}</main>
+      </div>
+    </div>
+  );
+}
+
+export function PageHeader({
+  title,
+  description,
+  actions,
+}: {
+  title: string;
+  description?: string;
+  actions?: ReactNode;
+}) {
+  return (
+    <div className="flex items-start justify-between gap-4 mb-6">
+      <div>
+        <h1 className="text-2xl md:text-3xl font-semibold tracking-tight">{title}</h1>
+        {description && <p className="text-sm text-muted-foreground mt-1">{description}</p>}
+      </div>
+      {actions && <div className="flex items-center gap-2">{actions}</div>}
+    </div>
+  );
+}
+
+export function CompanyLogo({ initials, id, size = "md" }: { initials: string; id: string; size?: "sm" | "md" | "lg" }) {
+  const palettes = [
+    "from-indigo-500 to-purple-600",
+    "from-emerald-500 to-teal-600",
+    "from-orange-500 to-pink-600",
+    "from-blue-500 to-cyan-600",
+    "from-rose-500 to-red-600",
+    "from-amber-500 to-orange-600",
+    "from-violet-500 to-fuchsia-600",
+    "from-slate-600 to-slate-800",
+  ];
+  const hue = palettes[Math.abs(id.charCodeAt(id.length - 1)) % palettes.length];
+  const sz = size === "sm" ? "h-8 w-8 text-xs" : size === "lg" ? "h-16 w-16 text-lg" : "h-10 w-10 text-sm";
+  return (
+    <div className={cn("rounded-lg bg-gradient-to-br grid place-items-center text-white font-semibold shadow-soft shrink-0", hue, sz)}>
+      {initials}
+    </div>
+  );
+}

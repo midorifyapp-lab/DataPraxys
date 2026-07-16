@@ -1,24 +1,252 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, Link } from "@tanstack/react-router";
+import { AppShell, PageHeader, CompanyLogo } from "@/components/app-shell";
+import { useApp } from "@/lib/app-state";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import {
+  Building2, Download, Upload, Clock, FileText, TrendingUp, Users,
+  Send, ArrowUpRight, Inbox, CheckCircle2,
+} from "lucide-react";
+import { companies, files, activity, notifications } from "@/lib/mock-data";
+import { cn } from "@/lib/utils";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
-  component: Index,
+  component: IndexPage,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
+function IndexPage() {
+  const { role } = useApp();
+  return <AppShell>{role === "admin" ? <AdminDashboard /> : <CompanyHome />}</AppShell>;
+}
+
+/* ---------------- ADMIN DASHBOARD ---------------- */
+
+function StatCard({
+  label, value, delta, icon: Icon, tone,
+}: { label: string; value: string; delta: string; icon: any; tone: string }) {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
+    <Card className="shadow-soft border-border/60">
+      <CardContent className="p-5">
+        <div className="flex items-start justify-between">
+          <div>
+            <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide">{label}</div>
+            <div className="mt-2 text-3xl font-semibold tracking-tight">{value}</div>
+            <div className="mt-2 flex items-center gap-1 text-xs text-emerald-600">
+              <TrendingUp className="h-3 w-3" /> {delta}
+            </div>
+          </div>
+          <div className={cn("h-10 w-10 rounded-lg grid place-items-center", tone)}>
+            <Icon className="h-5 w-5" />
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+function AdminDashboard() {
+  const unread = notifications.filter((n) => !n.read);
+  return (
+    <>
+      <PageHeader
+        title="Dashboard"
+        description="Overview of your file exchange activity across all companies."
+        actions={
+          <>
+            <Button variant="outline" size="sm">Export</Button>
+            <Button asChild size="sm">
+              <Link to="/companies/new"><Users className="h-4 w-4" /> New company</Link>
+            </Button>
+          </>
+        }
       />
+
+      <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <StatCard label="Total companies" value={String(companies.length)} delta="+2 this month" icon={Building2} tone="bg-indigo-50 text-indigo-600" />
+        <StatCard label="Files received" value="128" delta="+12% vs last week" icon={Inbox} tone="bg-emerald-50 text-emerald-600" />
+        <StatCard label="Files sent" value="94" delta="+8% vs last week" icon={Send} tone="bg-blue-50 text-blue-600" />
+        <StatCard label="Pending deliveries" value="6" delta="2 need action" icon={Clock} tone="bg-amber-50 text-amber-600" />
+      </div>
+
+      <div className="mt-6 grid gap-6 lg:grid-cols-3">
+        <Card className="shadow-soft lg:col-span-2">
+          <CardHeader className="flex-row items-center justify-between space-y-0">
+            <div>
+              <CardTitle className="text-base">Recent activity</CardTitle>
+              <p className="text-xs text-muted-foreground mt-0.5">Latest events across your workspace</p>
+            </div>
+            <Button variant="ghost" size="sm">View all</Button>
+          </CardHeader>
+          <CardContent className="pt-0">
+            <ul className="divide-y">
+              {activity.map((a) => {
+                const iconMap: any = {
+                  upload: { icon: Upload, tone: "bg-emerald-50 text-emerald-600" },
+                  send: { icon: Send, tone: "bg-blue-50 text-blue-600" },
+                  download: { icon: Download, tone: "bg-slate-100 text-slate-600" },
+                  company_created: { icon: Building2, tone: "bg-indigo-50 text-indigo-600" },
+                };
+                const { icon: I, tone } = iconMap[a.type];
+                return (
+                  <li key={a.id} className="py-3 flex items-center gap-3">
+                    <div className={cn("h-9 w-9 rounded-lg grid place-items-center", tone)}>
+                      <I className="h-4 w-4" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <div className="text-sm">
+                        <span className="font-medium">{a.actor}</span>{" "}
+                        <span className="text-muted-foreground">{a.description}</span>
+                      </div>
+                      <div className="text-xs text-muted-foreground">{a.time}</div>
+                    </div>
+                  </li>
+                );
+              })}
+            </ul>
+          </CardContent>
+        </Card>
+
+        <Card className="shadow-soft">
+          <CardHeader>
+            <div className="flex items-center justify-between">
+              <CardTitle className="text-base">Requires review</CardTitle>
+              <Badge variant="secondary">{unread.length}</Badge>
+            </div>
+            <p className="text-xs text-muted-foreground">Companies that just uploaded files</p>
+          </CardHeader>
+          <CardContent className="pt-0 space-y-2">
+            {unread.map((n) => {
+              const c = companies.find((x) => x.id === n.companyId);
+              if (!c) return null;
+              return (
+                <Link
+                  key={n.id}
+                  to="/companies/$id"
+                  params={{ id: c.id }}
+                  className="flex items-center gap-3 rounded-lg p-2 hover:bg-muted/50 transition-colors"
+                >
+                  <CompanyLogo initials={c.logo} id={c.id} size="sm" />
+                  <div className="min-w-0 flex-1">
+                    <div className="text-sm font-medium truncate">{c.name}</div>
+                    <div className="text-xs text-muted-foreground truncate">{n.description}</div>
+                  </div>
+                  <ArrowUpRight className="h-4 w-4 text-muted-foreground" />
+                </Link>
+              );
+            })}
+            {unread.length === 0 && (
+              <div className="text-center py-8 text-sm text-muted-foreground">
+                <CheckCircle2 className="h-10 w-10 mx-auto mb-2 text-emerald-500" />
+                All caught up
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </>
+  );
+}
+
+/* ---------------- COMPANY HOME ---------------- */
+
+function CompanyHome() {
+  const { currentCompanyId } = useApp();
+  const company = companies.find((c) => c.id === currentCompanyId)!;
+  const received = files.filter((f) => f.companyId === company.id && f.direction === "sent")[0];
+  const uploaded = files.filter((f) => f.companyId === company.id && f.direction === "received")[0];
+
+  return (
+    <>
+      <PageHeader title={`Welcome, ${company.username}`} description="Here's a snapshot of your recent file activity." />
+
+      <Card className="shadow-soft mb-6 overflow-hidden">
+        <div className="h-24 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500" />
+        <CardContent className="p-6 -mt-10">
+          <div className="flex items-end gap-4">
+            <CompanyLogo initials={company.logo} id={company.id} size="lg" />
+            <div className="pb-1">
+              <div className="text-lg font-semibold">{company.name}</div>
+              <div className="text-sm text-muted-foreground">RUC {company.ruc} · {company.email}</div>
+            </div>
+            <div className="ml-auto">
+              <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100">Active</Badge>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      <div className="grid gap-6 md:grid-cols-2">
+        <Card className="shadow-soft">
+          <CardHeader>
+            <CardTitle className="text-base flex items-center gap-2">
+              <Inbox className="h-4 w-4 text-indigo-600" /> Latest received file
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {received ? (
+              <div className="space-y-3">
+                <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/40">
+                  <FileText className="h-8 w-8 text-indigo-600" />
+                  <div className="min-w-0 flex-1">
+                    <div className="text-sm font-medium truncate">{received.filename}</div>
+                    <div className="text-xs text-muted-foreground">Received {received.sentDate}</div>
+                  </div>
+                </div>
+                <Button className="w-full"><Download className="h-4 w-4" /> Download</Button>
+              </div>
+            ) : (
+              <EmptyMini icon={Inbox} text="No files received yet" />
+            )}
+          </CardContent>
+        </Card>
+
+        <Card className="shadow-soft">
+          <CardHeader>
+            <CardTitle className="text-base flex items-center gap-2">
+              <Upload className="h-4 w-4 text-emerald-600" /> Latest uploaded file
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            {uploaded ? (
+              <div className="space-y-3">
+                <div className="flex items-center gap-3 p-3 rounded-lg bg-muted/40">
+                  <FileText className="h-8 w-8 text-emerald-600" />
+                  <div className="min-w-0 flex-1">
+                    <div className="text-sm font-medium truncate">{uploaded.filename}</div>
+                    <div className="text-xs text-muted-foreground">Uploaded {uploaded.sentDate}</div>
+                  </div>
+                  <StatusBadge status={uploaded.status} />
+                </div>
+                <Button asChild variant="outline" className="w-full">
+                  <Link to="/my-files">Manage file</Link>
+                </Button>
+              </div>
+            ) : (
+              <EmptyMini icon={Upload} text="No file uploaded yet" />
+            )}
+          </CardContent>
+        </Card>
+      </div>
+    </>
+  );
+}
+
+function EmptyMini({ icon: Icon, text }: { icon: any; text: string }) {
+  return (
+    <div className="text-center py-8 text-sm text-muted-foreground">
+      <Icon className="h-10 w-10 mx-auto mb-2 opacity-40" />
+      {text}
     </div>
   );
+}
+
+export function StatusBadge({ status }: { status: string }) {
+  const map: Record<string, string> = {
+    pending: "bg-amber-100 text-amber-700 hover:bg-amber-100",
+    available: "bg-indigo-100 text-indigo-700 hover:bg-indigo-100",
+    downloaded: "bg-emerald-100 text-emerald-700 hover:bg-emerald-100",
+    deleted: "bg-slate-200 text-slate-600 hover:bg-slate-200",
+  };
+  return <Badge className={cn("capitalize font-medium", map[status])}>{status}</Badge>;
 }
