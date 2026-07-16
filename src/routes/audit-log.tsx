@@ -16,14 +16,14 @@ export const Route = createFileRoute("/audit-log")({
 });
 
 const actionTones: Record<string, string> = {
-  "Company Created": "bg-indigo-50 text-indigo-700",
-  "Company Updated": "bg-blue-50 text-blue-700",
-  "Password Changed": "bg-amber-50 text-amber-700",
-  "File Uploaded": "bg-emerald-50 text-emerald-700",
-  "File Downloaded": "bg-slate-100 text-slate-700",
-  "File Deleted": "bg-rose-50 text-rose-700",
-  "Login": "bg-teal-50 text-teal-700",
-  "Logout": "bg-slate-100 text-slate-700",
+  "Empresa Creada": "bg-indigo-50 text-indigo-700",
+  "Empresa Actualizada": "bg-blue-50 text-blue-700",
+  "Contraseña Cambiada": "bg-amber-50 text-amber-700",
+  "Archivo Subido": "bg-emerald-50 text-emerald-700",
+  "Archivo Descargado": "bg-slate-100 text-slate-700",
+  "Archivo Eliminado": "bg-rose-50 text-rose-700",
+  "Inicio de Sesión": "bg-teal-50 text-teal-700",
+  "Cierre de Sesión": "bg-slate-100 text-slate-700",
 };
 
 function AuditLogPage() {
@@ -37,23 +37,23 @@ function AuditLogPage() {
 
   return (
     <AppShell>
-      <PageHeader title="Audit Log" description="A complete history of actions performed across your workspace." />
+      <PageHeader title="Registro de Auditoría" description="Historial completo de acciones realizadas en tu espacio de trabajo." />
       <Card className="shadow-soft">
         <div className="p-4 border-b">
           <div className="relative max-w-sm">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Search actions, users, entities..." className="pl-9" />
+            <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Buscar acciones, usuarios, entidades..." className="pl-9" />
           </div>
         </div>
         <CardContent className="p-0">
           <Table>
             <TableHeader>
               <TableRow className="bg-muted/40 hover:bg-muted/40">
-                <TableHead>Date</TableHead>
-                <TableHead>User</TableHead>
-                <TableHead>Action</TableHead>
-                <TableHead>Entity</TableHead>
-                <TableHead>Description</TableHead>
+                <TableHead>Fecha</TableHead>
+                <TableHead>Usuario</TableHead>
+                <TableHead>Acción</TableHead>
+                <TableHead>Entidad</TableHead>
+                <TableHead>Descripción</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>

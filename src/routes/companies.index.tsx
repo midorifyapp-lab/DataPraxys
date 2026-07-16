@@ -38,17 +38,17 @@ function CompaniesPage() {
 
   const remove = (id: string) => {
     setRows((r) => r.filter((x) => x.id !== id));
-    toast.success("Company deleted");
+    toast.success("Empresa eliminada");
   };
 
   return (
     <AppShell>
       <PageHeader
-        title="Companies"
-        description="Manage partner companies that exchange files with your organization."
+        title="Empresas"
+        description="Administra las empresas socias que intercambian archivos con tu organización."
         actions={
           <Button asChild size="sm">
-            <Link to="/companies/new"><Plus className="h-4 w-4" /> New company</Link>
+            <Link to="/companies/new"><Plus className="h-4 w-4" /> Nueva empresa</Link>
           </Button>
         }
       />
@@ -60,23 +60,23 @@ function CompaniesPage() {
             <Input
               value={q}
               onChange={(e) => setQ(e.target.value)}
-              placeholder="Search by name, RUC, email..."
+              placeholder="Buscar por nombre, RUC, email..."
               className="pl-9"
             />
           </div>
-          <Button variant="outline" size="sm"><Filter className="h-4 w-4" /> Filters</Button>
+          <Button variant="outline" size="sm"><Filter className="h-4 w-4" /> Filtros</Button>
         </div>
         <CardContent className="p-0">
           <Table>
             <TableHeader>
               <TableRow className="bg-muted/40 hover:bg-muted/40">
                 <TableHead className="w-12"></TableHead>
-                <TableHead>Company</TableHead>
+                <TableHead>Empresa</TableHead>
                 <TableHead>RUC</TableHead>
-                <TableHead>User</TableHead>
+                <TableHead>Usuario</TableHead>
                 <TableHead>Email</TableHead>
-                <TableHead>Position</TableHead>
-                <TableHead>Status</TableHead>
+                <TableHead>Cargo</TableHead>
+                <TableHead>Estado</TableHead>
                 <TableHead className="w-12"></TableHead>
               </TableRow>
             </TableHeader>
@@ -95,12 +95,11 @@ function CompaniesPage() {
                   <TableCell className="text-sm">{c.position}</TableCell>
                   <TableCell>
                     <Badge className={cn(
-                      "capitalize",
                       c.status === "active"
                         ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-100"
                         : "bg-slate-200 text-slate-600 hover:bg-slate-200",
                     )}>
-                      {c.status}
+                      {c.status === "active" ? "Activa" : "Inactiva"}
                     </Badge>
                   </TableCell>
                   <TableCell>
@@ -113,7 +112,7 @@ function CompaniesPage() {
               ))}
               {filtered.length === 0 && (
                 <TableRow><TableCell colSpan={8} className="text-center py-12 text-sm text-muted-foreground">
-                  No companies match your search.
+                  No se encontraron empresas.
                 </TableCell></TableRow>
               )}
             </TableBody>
@@ -131,26 +130,26 @@ function RowActions({ onView, onDelete }: { onView: () => void; onDelete: () => 
         <Button variant="ghost" size="icon" className="h-8 w-8"><MoreHorizontal className="h-4 w-4" /></Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-36">
-        <DropdownMenuItem onClick={onView}><Eye className="h-4 w-4" /> View</DropdownMenuItem>
-        <DropdownMenuItem><Pencil className="h-4 w-4" /> Edit</DropdownMenuItem>
+        <DropdownMenuItem onClick={onView}><Eye className="h-4 w-4" /> Ver</DropdownMenuItem>
+        <DropdownMenuItem><Pencil className="h-4 w-4" /> Editar</DropdownMenuItem>
         <DropdownMenuSeparator />
         <AlertDialog>
           <AlertDialogTrigger asChild>
             <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="text-destructive focus:text-destructive">
-              <Trash2 className="h-4 w-4" /> Delete
+              <Trash2 className="h-4 w-4" /> Eliminar
             </DropdownMenuItem>
           </AlertDialogTrigger>
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Delete company?</AlertDialogTitle>
+              <AlertDialogTitle>¿Eliminar empresa?</AlertDialogTitle>
               <AlertDialogDescription>
-                This will remove the company and all associated files. This action cannot be undone.
+                Esto eliminará la empresa y todos sus archivos asociados. Esta acción no se puede deshacer.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel>Cancel</AlertDialogCancel>
+              <AlertDialogCancel>Cancelar</AlertDialogCancel>
               <AlertDialogAction onClick={onDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
-                Delete
+                Eliminar
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>

@@ -15,46 +15,46 @@ export const Route = createFileRoute("/settings")({
 function SettingsPage() {
   return (
     <AppShell>
-      <PageHeader title="Settings" description="Manage workspace preferences and security options." />
+      <PageHeader title="Configuración" description="Administra las preferencias y opciones de seguridad de tu espacio de trabajo." />
 
       <div className="grid gap-6 max-w-3xl">
         <Card className="shadow-soft">
-          <CardHeader><CardTitle className="text-base">Workspace</CardTitle></CardHeader>
+          <CardHeader><CardTitle className="text-base">Espacio de trabajo</CardTitle></CardHeader>
           <CardContent className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-1.5">
-              <Label className="text-xs">Workspace name</Label>
+              <Label className="text-xs">Nombre del espacio</Label>
               <Input defaultValue="Exchange HQ" />
             </div>
             <div className="space-y-1.5">
-              <Label className="text-xs">Support email</Label>
-              <Input defaultValue="support@exchange.io" />
+              <Label className="text-xs">Email de soporte</Label>
+              <Input defaultValue="soporte@exchange.io" />
             </div>
           </CardContent>
         </Card>
 
         <Card className="shadow-soft">
-          <CardHeader><CardTitle className="text-base">Notifications</CardTitle></CardHeader>
+          <CardHeader><CardTitle className="text-base">Notificaciones</CardTitle></CardHeader>
           <CardContent className="space-y-4">
-            <Toggle title="Email me when a company uploads a file" defaultOn />
+            <Toggle title="Enviarme un email cuando una empresa suba un archivo" defaultOn />
             <Separator />
-            <Toggle title="Weekly activity digest" defaultOn />
+            <Toggle title="Resumen semanal de actividad" defaultOn />
             <Separator />
-            <Toggle title="Product announcements" />
+            <Toggle title="Anuncios del producto" />
           </CardContent>
         </Card>
 
         <Card className="shadow-soft">
-          <CardHeader><CardTitle className="text-base">Security</CardTitle></CardHeader>
+          <CardHeader><CardTitle className="text-base">Seguridad</CardTitle></CardHeader>
           <CardContent className="space-y-4">
-            <Toggle title="Require 2FA for administrators" defaultOn />
+            <Toggle title="Requerir 2FA para administradores" defaultOn />
             <Separator />
-            <Toggle title="Auto-expire download links after 7 days" defaultOn />
+            <Toggle title="Expirar enlaces de descarga después de 7 días" defaultOn />
           </CardContent>
         </Card>
 
         <div className="flex justify-end gap-2">
-          <Button variant="outline">Cancel</Button>
-          <Button onClick={() => toast.success("Settings saved")}>Save changes</Button>
+          <Button variant="outline">Cancelar</Button>
+          <Button onClick={() => toast.success("Configuración guardada")}>Guardar cambios</Button>
         </div>
       </div>
     </AppShell>
