@@ -86,6 +86,10 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:description", content: "Consola premium para intercambiar archivos de forma segura entre tu organización y las empresas socias." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
+      { name: "twitter:title", content: "Exchange — Transferencia segura de archivos B2B" },
+      { name: "twitter:description", content: "Consola premium para intercambiar archivos de forma segura entre tu organización y las empresas socias." },
+      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f7fc4b4c-2dd8-40f7-8625-4337fff80908/id-preview-40fd0057--c483095c-472f-4d6f-90ac-ef0bde1023f0.lovable.app-1784165139858.png" },
+      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f7fc4b4c-2dd8-40f7-8625-4337fff80908/id-preview-40fd0057--c483095c-472f-4d6f-90ac-ef0bde1023f0.lovable.app-1784165139858.png" },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
