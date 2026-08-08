@@ -1,4 +1,5 @@
 import { createContext, useContext, useEffect, useState, type ReactNode } from "react";
+import { notificationsService } from "@/features/notifications/services/notifications.service";
 
 export type Role = "admin" | "company";
 
@@ -23,44 +24,22 @@ const Ctx = createContext<AppState | null>(null);
 
 export function AppProvider({ children }: { children: ReactNode }) {
   const [role, setRoleState] = useState<Role>("admin");
-  const [notifs, setNotifs] = useState<AppNotification[]>([
-    {
-      id: "n1",
-      title: "Nuevo archivo de Northwind Trading",
-      description: "factura-nov-2025.pdf esperando revisión",
-      time: "hace 12 min",
-      read: false,
-      companyId: "c1",
-    },
-    {
-      id: "n2",
-      title: "Nuevo archivo de Acme Global",
-      description: "orden-de-compra-8821.xlsx subido",
-      time: "hace 1 hora",
-      read: false,
-      companyId: "c2",
-    },
-    {
-      id: "n3",
-      title: "Nuevo archivo de Solera Foods",
-      description: "lista-proveedores.csv subido",
-      time: "ayer",
-      read: false,
-      companyId: "c6",
-    },
-    {
-      id: "n4",
-      title: "Meridian Labs descargó un archivo",
-      description: "notas-auditoria.docx",
-      time: "hace 3 horas",
-      read: true,
-      companyId: "c3",
-    },
-  ]);
+  const [notifs, setNotifs] = useState<AppNotification[]>([]);
 
   useEffect(() => {
     const saved = typeof window !== "undefined" ? window.localStorage.getItem("app.role") : null;
     if (saved === "admin" || saved === "company") setRoleState(saved);
+  }, []);
+
+  // Load notifications from the notifications service (abstracts mocks/api)
+  useEffect(() => {
+    let mounted = true;
+    notificationsService.getAll().then((n) => {
+      if (mounted) setNotifs(n);
+    });
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   const setRole = (r: Role) => {
@@ -74,7 +53,10 @@ export function AppProvider({ children }: { children: ReactNode }) {
         role,
         setRole,
         notifications: notifs,
-        markAllRead: () => setNotifs((n) => n.map((x) => ({ ...x, read: true }))),
+        markAllRead: async () => {
+          const updated = await notificationsService.markAllRead();
+          setNotifs(updated);
+        },
         currentCompanyId: "c1",
       }}
     >

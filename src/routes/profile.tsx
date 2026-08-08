@@ -1,5 +1,6 @@
+import React from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { AppShell, PageHeader } from "@/components/app-shell";
+import { AppShell, PageHeader } from "@/components/layout/app-shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -7,12 +8,26 @@ import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ImagePlus } from "lucide-react";
 import { toast } from "sonner";
+import { useProfile } from "@/features/profile/hooks/useProfile";
 
 export const Route = createFileRoute("/profile")({
   component: ProfilePage,
 });
 
 function ProfilePage() {
+  const { profile, update } = useProfile();
+  const [email, setEmail] = React.useState("");
+
+  React.useEffect(() => {
+    if (profile) setEmail(profile.email);
+  }, [profile]);
+
+  const save = async () => {
+    if (!profile) return;
+    await update({ email });
+    toast.success("Perfil actualizado");
+  };
+
   return (
     <AppShell>
       <PageHeader title="Perfil" description="Actualiza tu información personal y de seguridad." />
@@ -25,7 +40,13 @@ function ProfilePage() {
           <CardContent className="flex flex-col items-center gap-4">
             <Avatar className="h-24 w-24">
               <AvatarFallback className="bg-gradient-to-br from-indigo-500 to-purple-600 text-white text-2xl font-semibold">
-                JP
+                {profile
+                  ? profile.name
+                      .split(" ")
+                      .map((s) => s[0])
+                      .slice(0, 2)
+                      .join("")
+                  : "JP"}
               </AvatarFallback>
             </Avatar>
             <Button variant="outline" size="sm">
@@ -42,10 +63,10 @@ function ProfilePage() {
             <CardContent className="space-y-4">
               <div className="space-y-1.5">
                 <Label className="text-xs">Email de contacto</Label>
-                <Input defaultValue="j.perez@northwind.com" />
+                <Input value={email} onChange={(e) => setEmail(e.target.value)} />
               </div>
               <div className="flex justify-end">
-                <Button onClick={() => toast.success("Email actualizado")}>Guardar</Button>
+                <Button onClick={save}>Guardar</Button>
               </div>
             </CardContent>
           </Card>

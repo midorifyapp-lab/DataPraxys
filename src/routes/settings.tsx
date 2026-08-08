@@ -1,5 +1,6 @@
+import React from "react";
 import { createFileRoute } from "@tanstack/react-router";
-import { AppShell, PageHeader } from "@/components/app-shell";
+import { AppShell, PageHeader } from "@/components/layout/app-shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -7,12 +8,30 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { toast } from "sonner";
+import { useSettings } from "@/features/settings/hooks/useSettings";
 
 export const Route = createFileRoute("/settings")({
   component: SettingsPage,
 });
 
 function SettingsPage() {
+  const { settings, update } = useSettings();
+  const [name, setName] = React.useState("");
+  const [email, setEmail] = React.useState("");
+
+  React.useEffect(() => {
+    if (settings) {
+      setName(settings.companyName ?? "");
+      setEmail(settings.billingEmail ?? "");
+    }
+  }, [settings]);
+
+  const save = async () => {
+    if (!settings) return;
+    await update({ companyName: name, billingEmail: email });
+    toast.success("Configuración guardada");
+  };
+
   return (
     <AppShell>
       <PageHeader
@@ -28,11 +47,11 @@ function SettingsPage() {
           <CardContent className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-1.5">
               <Label className="text-xs">Nombre del espacio</Label>
-              <Input defaultValue="Exchange HQ" />
+              <Input value={name} onChange={(e) => setName(e.target.value)} />
             </div>
             <div className="space-y-1.5">
               <Label className="text-xs">Email de soporte</Label>
-              <Input defaultValue="soporte@exchange.io" />
+              <Input value={email} onChange={(e) => setEmail(e.target.value)} />
             </div>
           </CardContent>
         </Card>
@@ -63,7 +82,7 @@ function SettingsPage() {
 
         <div className="flex justify-end gap-2">
           <Button variant="outline">Cancelar</Button>
-          <Button onClick={() => toast.success("Configuración guardada")}>Guardar cambios</Button>
+          <Button onClick={save}>Guardar cambios</Button>
         </div>
       </div>
     </AppShell>

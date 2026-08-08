@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AppShell, PageHeader, CompanyLogo } from "@/components/app-shell";
+import { AppShell, PageHeader, CompanyLogo } from "@/components/layout/app-shell";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -20,8 +20,8 @@ import {
 } from "@/components/ui/select";
 import { Search, Download, ArrowDownLeft, ArrowUpRight } from "lucide-react";
 import { useState } from "react";
-import { files } from "@/features/exchange/mocks/exchange.mock";
-import { companies } from "@/features/companies/mocks/companies.mock";
+import { useCompanies } from "@/features/companies/hooks/useCompanies";
+import { useExchange } from "@/features/exchange/hooks/useExchange";
 import { StatusBadge } from "./index";
 import { cn } from "@/lib/utils";
 
@@ -33,6 +33,8 @@ function FileExchange() {
   const [q, setQ] = useState("");
   const [status, setStatus] = useState("all");
   const [company, setCompany] = useState("all");
+  const { companies } = useCompanies();
+  const { files } = useExchange();
 
   const filtered = files.filter((f) => {
     const c = companies.find((c) => c.id === f.companyId);

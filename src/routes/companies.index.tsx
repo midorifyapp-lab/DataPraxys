@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
-import { AppShell, PageHeader, CompanyLogo } from "@/components/app-shell";
+import { AppShell, PageHeader, CompanyLogo } from "@/components/layout/app-shell";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -32,9 +32,9 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Search, Filter, Plus, MoreHorizontal, Eye, Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
-import { companies as seed } from "@/features/companies/mocks/companies.mock";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
+import { useCompanies } from "@/features/companies/hooks/useCompanies";
 
 export const Route = createFileRoute("/companies/")({
   component: CompaniesPage,
@@ -42,10 +42,10 @@ export const Route = createFileRoute("/companies/")({
 
 function CompaniesPage() {
   const [q, setQ] = useState("");
-  const [rows, setRows] = useState(seed);
+  const { companies, removeCompany } = useCompanies();
   const navigate = useNavigate();
 
-  const filtered = rows.filter(
+  const filtered = companies.filter(
     (c) =>
       c.name.toLowerCase().includes(q.toLowerCase()) ||
       c.ruc.includes(q) ||
@@ -53,7 +53,7 @@ function CompaniesPage() {
   );
 
   const remove = (id: string) => {
-    setRows((r) => r.filter((x) => x.id !== id));
+    removeCompany(id);
     toast.success("Empresa eliminada");
   };
 

@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { AppShell, PageHeader, CompanyLogo } from "@/components/app-shell";
-import { useAuth } from "@/context/AuthContext";
+import { AppShell, PageHeader, CompanyLogo } from "@/components/layout/app-shell";
+import { useAuthFeature } from "@/features/auth/hooks/useAuthFeature";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -17,10 +17,10 @@ import {
   Inbox,
   CheckCircle2,
 } from "lucide-react";
-import { companies } from "@/features/companies/mocks/companies.mock";
-import { files } from "@/features/exchange/mocks/exchange.mock";
-import { activity } from "@/features/activity/mocks/activity.mock";
-import { notifications } from "@/features/notifications/mocks/notifications.mock";
+import { useCompanies } from "@/features/companies/hooks/useCompanies";
+import { useExchange } from "@/features/exchange/hooks/useExchange";
+import { useActivity } from "@/features/activity/hooks/useActivity";
+import { useNotifications } from "@/features/notifications/hooks/useNotifications";
 import { FileRecord } from "@/features/exchange/types";
 import { ActivityItem } from "@/features/activity/types";
 import { AppNotification } from "@/features/notifications/types";
@@ -31,7 +31,7 @@ export const Route = createFileRoute("/")({
 });
 
 function IndexPage() {
-  const { role } = useAuth();
+  const { role } = useAuthFeature();
   return <AppShell>{role === "admin" ? <AdminDashboard /> : <CompanyHome />}</AppShell>;
 }
 
@@ -73,6 +73,9 @@ function StatCard({
 }
 
 function AdminDashboard() {
+  const { companies } = useCompanies();
+  const { activity } = useActivity();
+  const { notifications } = useNotifications();
   const unread = notifications.filter((n) => !n.read);
   return (
     <>
@@ -213,10 +216,23 @@ function AdminDashboard() {
 /* ---------------- INICIO EMPRESA ---------------- */
 
 function CompanyHome() {
-  const { currentCompanyId } = useAuth();
-  const company = companies.find((c) => c.id === currentCompanyId)!;
-  const received = files.filter((f) => f.companyId === company.id && f.direction === "sent")[0];
-  const uploaded = files.filter((f) => f.companyId === company.id && f.direction === "received")[0];
+  const { currentCompanyId } = useAuthFeature();
+  const { companies } = useCompanies();
+  const { files } = useExchange();
+
+  const company = companies.find((c) => c.id === currentCompanyId);
+  const received = files.filter((f) => f.companyId === company?.id && f.direction === "sent")[0];
+  const uploaded = files.filter(
+    (f) => f.companyId === company?.id && f.direction === "received",
+  )[0];
+
+  if (!company) {
+    return (
+      <AppShell>
+        <div className="text-center py-24 text-muted-foreground">Empresa no encontrada.</div>
+      </AppShell>
+    );
+  }
 
   return (
     <>

@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { AppShell, PageHeader } from "@/components/app-shell";
+import { AppShell, PageHeader } from "@/components/layout/app-shell";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
@@ -13,7 +13,7 @@ import {
 } from "@/components/ui/table";
 import { Search } from "lucide-react";
 import { useState } from "react";
-import { auditLog } from "@/features/audit/mocks/audit.mock";
+import { useAudit } from "@/features/audit/hooks/useAudit";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/audit-log")({
@@ -33,7 +33,8 @@ const actionTones: Record<string, string> = {
 
 function AuditLogPage() {
   const [q, setQ] = useState("");
-  const filtered = auditLog.filter(
+  const { entries } = useAudit();
+  const filtered = entries.filter(
     (l) =>
       l.action.toLowerCase().includes(q.toLowerCase()) ||
       l.user.toLowerCase().includes(q.toLowerCase()) ||

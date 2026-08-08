@@ -1,5 +1,5 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { AppShell, CompanyLogo } from "@/components/app-shell";
+import { AppShell, CompanyLogo } from "@/components/layout/app-shell";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -24,18 +24,19 @@ import {
   CheckCircle2,
   CloudUpload,
 } from "lucide-react";
-import { companies } from "@/features/companies/mocks/companies.mock";
-import { files } from "@/features/exchange/mocks/exchange.mock";
+import { companiesService } from "@/features/companies/services/companies.service";
+import { exchangeService } from "@/features/exchange/services/exchange.service";
 import { FileRecord } from "@/features/exchange/types";
 import { useState, useRef } from "react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/companies/$id")({
-  loader: ({ params }) => {
-    const company = companies.find((c) => c.id === params.id);
+  loader: async ({ params }) => {
+    const company = await companiesService.getById(params.id);
     if (!company) throw notFound();
-    return { company };
+    const files = await exchangeService.getByCompany(company.id);
+    return { company, files };
   },
   component: CompanyDetail,
   notFoundComponent: () => (
@@ -46,7 +47,7 @@ export const Route = createFileRoute("/companies/$id")({
 });
 
 function CompanyDetail() {
-  const { company } = Route.useLoaderData();
+  const { company, files } = Route.useLoaderData();
   const received = files.filter((f) => f.companyId === company.id && f.direction === "received")[0];
   const sent = files.filter((f) => f.companyId === company.id && f.direction === "sent")[0];
 
