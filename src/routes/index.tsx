@@ -84,9 +84,6 @@ function AdminDashboard() {
         description="Resumen de la actividad de intercambio de archivos entre todas las empresas."
         actions={
           <>
-            <Button variant="outline" size="sm">
-              Exportar
-            </Button>
             <Button asChild size="sm">
               <Link to="/companies/new">
                 <Users className="h-4 w-4" /> Nueva empresa
@@ -242,8 +239,8 @@ function CompanyHome() {
       />
 
       <Card className="shadow-soft mb-6 overflow-hidden">
-        <div className="h-24 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500" />
-        <CardContent className="p-6 -mt-10">
+        <div className="h-24 bg-linear-to-br from-indigo-500 via-purple-500 to-pink-500" />
+        <CardContent className="p-6 mt-2">
           <div className="flex items-end gap-4">
             <CompanyLogo initials={company.logo} id={company.id} size="lg" />
             <div className="pb-1">
@@ -252,6 +249,7 @@ function CompanyHome() {
                 RUC {company.ruc} · {company.email}
               </div>
             </div>
+            <div />
             <div className="ml-auto">
               <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100">Activa</Badge>
             </div>
