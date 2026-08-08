@@ -17,7 +17,7 @@ import {
   Shield,
   Menu,
 } from "lucide-react";
-import { useApp } from "@/lib/app-state";
+import { useAuth } from "@/context/AuthContext";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -52,7 +52,7 @@ const companyNav = [
 ];
 
 function SidebarContent({ compact = false }: { compact?: boolean }) {
-  const { role } = useApp();
+  const { role } = useAuth();
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const nav = role === "admin" ? adminNav : companyNav;
 
@@ -62,11 +62,11 @@ function SidebarContent({ compact = false }: { compact?: boolean }) {
   return (
     <div className="flex h-full flex-col">
       <div className="flex h-16 items-center gap-2 px-5 border-b border-sidebar-border">
-        <div className="h-8 w-8 rounded-lg bg-gradient-to-br from-indigo-500 to-purple-600 grid place-items-center text-white font-semibold shadow-soft">
+        <div className="h-8 w-8 rounded-lg bg-linear-to-br from-indigo-500 to-purple-600 grid place-items-center text-white font-semibold shadow-soft">
           Ex
         </div>
         <div className="leading-tight">
-          <div className="text-sm font-semibold text-sidebar-foreground">Exchange</div>
+          <div className="text-sm font-semibold text-sidebar-foreground">Datapraxsys</div>
           <div className="text-[11px] text-muted-foreground">
             {role === "admin" ? "Consola de administración" : "Portal de empresa"}
           </div>
@@ -87,14 +87,16 @@ function SidebarContent({ compact = false }: { compact?: boolean }) {
                   : "text-sidebar-foreground/80 hover:bg-sidebar-accent/60 hover:text-sidebar-foreground",
               )}
             >
-              <Icon className={cn("h-4 w-4", active ? "text-indigo-600" : "text-muted-foreground")} />
+              <Icon
+                className={cn("h-4 w-4", active ? "text-indigo-600" : "text-muted-foreground")}
+              />
               <span>{item.label}</span>
             </Link>
           );
         })}
       </nav>
       <div className="p-3 border-t border-sidebar-border">
-        <div className="rounded-xl bg-gradient-to-br from-indigo-50 to-purple-50 p-3 text-xs text-slate-700">
+        <div className="rounded-xl bg-linear-to-br from-indigo-50 to-purple-50 p-3 text-xs text-slate-700">
           <div className="font-semibold mb-1 flex items-center gap-1.5">
             <Shield className="h-3.5 w-3.5" /> Transferencia segura
           </div>
@@ -108,8 +110,8 @@ function SidebarContent({ compact = false }: { compact?: boolean }) {
 }
 
 function Topbar() {
-  const { role, setRole, notifications, markAllRead } = useApp();
-  const unread = notifications.filter((n) => !n.read).length;
+  const { role, setRole } = useAuth();
+  const unread = 0;
   const [q, setQ] = useState("");
 
   return (
@@ -142,16 +144,23 @@ function Topbar() {
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="sm" className="gap-1.5 rounded-full">
               {role === "admin" ? (
-                <><Shield className="h-3.5 w-3.5" /> Vista admin</>
+                <>
+                  <Shield className="h-3.5 w-3.5" /> Vista admin
+                </>
               ) : (
-                <><Building2 className="h-3.5 w-3.5" /> Vista empresa</>
+                <>
+                  <Building2 className="h-3.5 w-3.5" /> Vista empresa
+                </>
               )}
               <ChevronDown className="h-3.5 w-3.5 opacity-60" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-52">
             <DropdownMenuLabel>Previsualizar rol</DropdownMenuLabel>
-            <DropdownMenuRadioGroup value={role} onValueChange={(v) => setRole(v as "admin" | "company")}>
+            <DropdownMenuRadioGroup
+              value={role}
+              onValueChange={(v) => setRole(v as "admin" | "company")}
+            >
               <DropdownMenuRadioItem value="admin">Administrador</DropdownMenuRadioItem>
               <DropdownMenuRadioItem value="company">Usuario de empresa</DropdownMenuRadioItem>
             </DropdownMenuRadioGroup>
@@ -173,22 +182,13 @@ function Topbar() {
                 <div className="text-sm font-semibold">Notificaciones</div>
                 <div className="text-xs text-muted-foreground">{unread} sin leer</div>
               </div>
-              <Button variant="ghost" size="sm" onClick={markAllRead}>
+              <Button variant="ghost" size="sm">
                 Marcar todas como leídas
               </Button>
             </div>
             <ScrollArea className="h-80">
-              <div className="divide-y">
-                {notifications.map((n) => (
-                  <div key={n.id} className="p-4 flex gap-3 hover:bg-muted/40">
-                    <div className={cn("mt-1 h-2 w-2 rounded-full shrink-0", n.read ? "bg-muted" : "bg-indigo-500")} />
-                    <div className="min-w-0">
-                      <div className="text-sm font-medium truncate">{n.title}</div>
-                      <div className="text-xs text-muted-foreground">{n.description}</div>
-                      <div className="text-[11px] text-muted-foreground mt-0.5">{n.time}</div>
-                    </div>
-                  </div>
-                ))}
+              <div className="p-4 text-sm text-muted-foreground">
+                No hay notificaciones disponibles en esta etapa.
               </div>
             </ScrollArea>
           </PopoverContent>
@@ -198,12 +198,14 @@ function Topbar() {
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="gap-2 px-2">
               <Avatar className="h-8 w-8">
-                <AvatarFallback className="bg-gradient-to-br from-indigo-500 to-purple-600 text-white text-xs font-semibold">
+                <AvatarFallback className="bg-linear-to-br from-indigo-500 to-purple-600 text-white text-xs font-semibold">
                   {role === "admin" ? "AD" : "JP"}
                 </AvatarFallback>
               </Avatar>
               <div className="hidden md:block text-left leading-tight">
-                <div className="text-sm font-medium">{role === "admin" ? "Alex Díaz" : "Juan Pérez"}</div>
+                <div className="text-sm font-medium">
+                  {role === "admin" ? "Alex Díaz" : "Juan Pérez"}
+                </div>
                 <div className="text-[11px] text-muted-foreground">
                   {role === "admin" ? "Administrador" : "Northwind Trading"}
                 </div>
@@ -214,10 +216,16 @@ function Topbar() {
           <DropdownMenuContent align="end" className="w-48">
             <DropdownMenuLabel>Mi cuenta</DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem><UserCog className="mr-2 h-4 w-4" /> Perfil</DropdownMenuItem>
-            <DropdownMenuItem><Settings className="mr-2 h-4 w-4" /> Configuración</DropdownMenuItem>
+            <DropdownMenuItem>
+              <UserCog className="mr-2 h-4 w-4" /> Perfil
+            </DropdownMenuItem>
+            <DropdownMenuItem>
+              <Settings className="mr-2 h-4 w-4" /> Configuración
+            </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem><LogOut className="mr-2 h-4 w-4" /> Cerrar sesión</DropdownMenuItem>
+            <DropdownMenuItem>
+              <LogOut className="mr-2 h-4 w-4" /> Cerrar sesión
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
@@ -233,7 +241,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       </aside>
       <div className="md:pl-64">
         <Topbar />
-        <main className="p-4 md:p-8 max-w-[1400px] mx-auto">{children}</main>
+        <main className="p-4 md:p-8 max-w-350 mx-auto">{children}</main>
       </div>
     </div>
   );
@@ -259,7 +267,15 @@ export function PageHeader({
   );
 }
 
-export function CompanyLogo({ initials, id, size = "md" }: { initials: string; id: string; size?: "sm" | "md" | "lg" }) {
+export function CompanyLogo({
+  initials,
+  id,
+  size = "md",
+}: {
+  initials: string;
+  id: string;
+  size?: "sm" | "md" | "lg";
+}) {
   const palettes = [
     "from-indigo-500 to-purple-600",
     "from-emerald-500 to-teal-600",
@@ -271,9 +287,16 @@ export function CompanyLogo({ initials, id, size = "md" }: { initials: string; i
     "from-slate-600 to-slate-800",
   ];
   const hue = palettes[Math.abs(id.charCodeAt(id.length - 1)) % palettes.length];
-  const sz = size === "sm" ? "h-8 w-8 text-xs" : size === "lg" ? "h-16 w-16 text-lg" : "h-10 w-10 text-sm";
+  const sz =
+    size === "sm" ? "h-8 w-8 text-xs" : size === "lg" ? "h-16 w-16 text-lg" : "h-10 w-10 text-sm";
   return (
-    <div className={cn("rounded-lg bg-gradient-to-br grid place-items-center text-white font-semibold shadow-soft shrink-0", hue, sz)}>
+    <div
+      className={cn(
+        "rounded-lg bg-linear-to-br grid place-items-center text-white font-semibold shadow-soft shrink-0",
+        hue,
+        sz,
+      )}
+    >
       {initials}
     </div>
   );

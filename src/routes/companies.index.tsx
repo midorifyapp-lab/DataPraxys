@@ -5,18 +5,34 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import {
-  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@/components/ui/table";
 import {
-  DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger, DropdownMenuSeparator,
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from "@/components/ui/dropdown-menu";
 import {
-  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
-  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Search, Filter, Plus, MoreHorizontal, Eye, Pencil, Trash2 } from "lucide-react";
 import { useState } from "react";
-import { companies as seed } from "@/lib/mock-data";
+import { companies as seed } from "@/features/companies/mocks/companies.mock";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
@@ -48,7 +64,9 @@ function CompaniesPage() {
         description="Administra las empresas socias que intercambian archivos con tu organización."
         actions={
           <Button asChild size="sm">
-            <Link to="/companies/new"><Plus className="h-4 w-4" /> Nueva empresa</Link>
+            <Link to="/companies/new">
+              <Plus className="h-4 w-4" /> Nueva empresa
+            </Link>
           </Button>
         }
       />
@@ -64,7 +82,9 @@ function CompaniesPage() {
               className="pl-9"
             />
           </div>
-          <Button variant="outline" size="sm"><Filter className="h-4 w-4" /> Filtros</Button>
+          <Button variant="outline" size="sm">
+            <Filter className="h-4 w-4" /> Filtros
+          </Button>
         </div>
         <CardContent className="p-0">
           <Table>
@@ -83,9 +103,15 @@ function CompaniesPage() {
             <TableBody>
               {filtered.map((c) => (
                 <TableRow key={c.id} className="hover:bg-muted/30">
-                  <TableCell><CompanyLogo initials={c.logo} id={c.id} size="sm" /></TableCell>
                   <TableCell>
-                    <Link to="/companies/$id" params={{ id: c.id }} className="font-medium hover:text-indigo-600">
+                    <CompanyLogo initials={c.logo} id={c.id} size="sm" />
+                  </TableCell>
+                  <TableCell>
+                    <Link
+                      to="/companies/$id"
+                      params={{ id: c.id }}
+                      className="font-medium hover:text-indigo-600"
+                    >
                       {c.name}
                     </Link>
                   </TableCell>
@@ -94,11 +120,13 @@ function CompaniesPage() {
                   <TableCell className="text-sm text-muted-foreground">{c.email}</TableCell>
                   <TableCell className="text-sm">{c.position}</TableCell>
                   <TableCell>
-                    <Badge className={cn(
-                      c.status === "active"
-                        ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-100"
-                        : "bg-slate-200 text-slate-600 hover:bg-slate-200",
-                    )}>
+                    <Badge
+                      className={cn(
+                        c.status === "active"
+                          ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-100"
+                          : "bg-slate-200 text-slate-600 hover:bg-slate-200",
+                      )}
+                    >
                       {c.status === "active" ? "Activa" : "Inactiva"}
                     </Badge>
                   </TableCell>
@@ -111,9 +139,14 @@ function CompaniesPage() {
                 </TableRow>
               ))}
               {filtered.length === 0 && (
-                <TableRow><TableCell colSpan={8} className="text-center py-12 text-sm text-muted-foreground">
-                  No se encontraron empresas.
-                </TableCell></TableRow>
+                <TableRow>
+                  <TableCell
+                    colSpan={8}
+                    className="text-center py-12 text-sm text-muted-foreground"
+                  >
+                    No se encontraron empresas.
+                  </TableCell>
+                </TableRow>
               )}
             </TableBody>
           </Table>
@@ -127,15 +160,24 @@ function RowActions({ onView, onDelete }: { onView: () => void; onDelete: () => 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" size="icon" className="h-8 w-8"><MoreHorizontal className="h-4 w-4" /></Button>
+        <Button variant="ghost" size="icon" className="h-8 w-8">
+          <MoreHorizontal className="h-4 w-4" />
+        </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-36">
-        <DropdownMenuItem onClick={onView}><Eye className="h-4 w-4" /> Ver</DropdownMenuItem>
-        <DropdownMenuItem><Pencil className="h-4 w-4" /> Editar</DropdownMenuItem>
+        <DropdownMenuItem onClick={onView}>
+          <Eye className="h-4 w-4" /> Ver
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <Pencil className="h-4 w-4" /> Editar
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <AlertDialog>
           <AlertDialogTrigger asChild>
-            <DropdownMenuItem onSelect={(e) => e.preventDefault()} className="text-destructive focus:text-destructive">
+            <DropdownMenuItem
+              onSelect={(e) => e.preventDefault()}
+              className="text-destructive focus:text-destructive"
+            >
               <Trash2 className="h-4 w-4" /> Eliminar
             </DropdownMenuItem>
           </AlertDialogTrigger>
@@ -143,12 +185,16 @@ function RowActions({ onView, onDelete }: { onView: () => void; onDelete: () => 
             <AlertDialogHeader>
               <AlertDialogTitle>¿Eliminar empresa?</AlertDialogTitle>
               <AlertDialogDescription>
-                Esto eliminará la empresa y todos sus archivos asociados. Esta acción no se puede deshacer.
+                Esto eliminará la empresa y todos sus archivos asociados. Esta acción no se puede
+                deshacer.
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
               <AlertDialogCancel>Cancelar</AlertDialogCancel>
-              <AlertDialogAction onClick={onDelete} className="bg-destructive text-destructive-foreground hover:bg-destructive/90">
+              <AlertDialogAction
+                onClick={onDelete}
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              >
                 Eliminar
               </AlertDialogAction>
             </AlertDialogFooter>

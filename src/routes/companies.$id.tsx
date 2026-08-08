@@ -5,11 +5,28 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import {
-  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
-  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { ArrowLeft, Download, Trash2, Upload, FileText, CheckCircle2, CloudUpload } from "lucide-react";
-import { companies, files } from "@/lib/mock-data";
+import {
+  ArrowLeft,
+  Download,
+  Trash2,
+  Upload,
+  FileText,
+  CheckCircle2,
+  CloudUpload,
+} from "lucide-react";
+import { companies } from "@/features/companies/mocks/companies.mock";
+import { files } from "@/features/exchange/mocks/exchange.mock";
+import { FileRecord } from "@/features/exchange/types";
 import { useState, useRef } from "react";
 import { toast } from "sonner";
 import { cn } from "@/lib/utils";
@@ -22,7 +39,9 @@ export const Route = createFileRoute("/companies/$id")({
   },
   component: CompanyDetail,
   notFoundComponent: () => (
-    <AppShell><div className="text-center py-24 text-muted-foreground">Empresa no encontrada.</div></AppShell>
+    <AppShell>
+      <div className="text-center py-24 text-muted-foreground">Empresa no encontrada.</div>
+    </AppShell>
   ),
 });
 
@@ -35,7 +54,9 @@ function CompanyDetail() {
     <AppShell>
       <div className="mb-4">
         <Button asChild variant="ghost" size="sm">
-          <Link to="/companies"><ArrowLeft className="h-4 w-4" /> Volver</Link>
+          <Link to="/companies">
+            <ArrowLeft className="h-4 w-4" /> Volver
+          </Link>
         </Button>
       </div>
 
@@ -46,11 +67,15 @@ function CompanyDetail() {
             <div className="flex-1">
               <div className="flex items-center gap-2 flex-wrap">
                 <h1 className="text-xl md:text-2xl font-semibold">{company.name}</h1>
-                <Badge className={cn(
-                  company.status === "active"
-                    ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-100"
-                    : "bg-slate-200 text-slate-600 hover:bg-slate-200",
-                )}>{company.status === "active" ? "Activa" : "Inactiva"}</Badge>
+                <Badge
+                  className={cn(
+                    company.status === "active"
+                      ? "bg-emerald-100 text-emerald-700 hover:bg-emerald-100"
+                      : "bg-slate-200 text-slate-600 hover:bg-slate-200",
+                  )}
+                >
+                  {company.status === "active" ? "Activa" : "Inactiva"}
+                </Badge>
               </div>
               <div className="text-sm text-muted-foreground mt-1">
                 RUC {company.ruc} · {company.email} · {company.position}
@@ -58,7 +83,9 @@ function CompanyDetail() {
             </div>
             <div className="flex gap-2">
               <Button variant="outline">Editar</Button>
-              <Button variant="outline" className="text-destructive">Eliminar</Button>
+              <Button variant="outline" className="text-destructive">
+                Eliminar
+              </Button>
             </div>
           </div>
         </CardContent>
@@ -73,14 +100,16 @@ function CompanyDetail() {
   );
 }
 
-function FileCard({ title, file, tone }: { title: string; file?: any; tone: string }) {
-  const toneMap: any = {
+function FileCard({ title, file, tone }: { title: string; file?: FileRecord; tone: string }) {
+  const toneMap: Record<string, string> = {
     indigo: "text-indigo-600 bg-indigo-50",
     emerald: "text-emerald-600 bg-emerald-50",
   };
   return (
     <Card className="shadow-soft">
-      <CardHeader><CardTitle className="text-base">{title}</CardTitle></CardHeader>
+      <CardHeader>
+        <CardTitle className="text-base">{title}</CardTitle>
+      </CardHeader>
       <CardContent>
         {file ? (
           <div className="space-y-3">
@@ -90,25 +119,37 @@ function FileCard({ title, file, tone }: { title: string; file?: any; tone: stri
               </div>
               <div className="min-w-0 flex-1">
                 <div className="text-sm font-medium truncate">{file.filename}</div>
-                <div className="text-xs text-muted-foreground">{file.sentDate} · {file.size}</div>
+                <div className="text-xs text-muted-foreground">
+                  {file.sentDate} · {file.size}
+                </div>
               </div>
             </div>
             <div className="grid grid-cols-2 gap-2">
-              <Button size="sm" variant="outline" onClick={() => toast.success("Descarga iniciada")}>
+              <Button
+                size="sm"
+                variant="outline"
+                onClick={() => toast.success("Descarga iniciada")}
+              >
                 <Download className="h-4 w-4" /> Descargar
               </Button>
               <AlertDialog>
                 <AlertDialogTrigger asChild>
-                  <Button size="sm" variant="outline" className="text-destructive"><Trash2 className="h-4 w-4" /> Eliminar</Button>
+                  <Button size="sm" variant="outline" className="text-destructive">
+                    <Trash2 className="h-4 w-4" /> Eliminar
+                  </Button>
                 </AlertDialogTrigger>
                 <AlertDialogContent>
                   <AlertDialogHeader>
                     <AlertDialogTitle>¿Eliminar este archivo?</AlertDialogTitle>
-                    <AlertDialogDescription>El archivo se eliminará permanentemente.</AlertDialogDescription>
+                    <AlertDialogDescription>
+                      El archivo se eliminará permanentemente.
+                    </AlertDialogDescription>
                   </AlertDialogHeader>
                   <AlertDialogFooter>
                     <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                    <AlertDialogAction onClick={() => toast.success("Archivo eliminado")}>Eliminar</AlertDialogAction>
+                    <AlertDialogAction onClick={() => toast.success("Archivo eliminado")}>
+                      Eliminar
+                    </AlertDialogAction>
                   </AlertDialogFooter>
                 </AlertDialogContent>
               </AlertDialog>
@@ -154,10 +195,15 @@ function UploadCard() {
 
   return (
     <Card className="shadow-soft">
-      <CardHeader><CardTitle className="text-base">Enviar nuevo archivo</CardTitle></CardHeader>
+      <CardHeader>
+        <CardTitle className="text-base">Enviar nuevo archivo</CardTitle>
+      </CardHeader>
       <CardContent>
         <div
-          onDragOver={(e) => { e.preventDefault(); setDrag(true); }}
+          onDragOver={(e) => {
+            e.preventDefault();
+            setDrag(true);
+          }}
           onDragLeave={() => setDrag(false)}
           onDrop={(e) => {
             e.preventDefault();
@@ -176,7 +222,12 @@ function UploadCard() {
           </div>
           <div className="text-sm font-medium">Arrastra un archivo o haz clic para explorar</div>
           <div className="text-xs text-muted-foreground mt-1">Hasta 50MB por archivo</div>
-          <input ref={inputRef} type="file" className="sr-only" onChange={(e) => e.target.files && pick(e.target.files[0])} />
+          <input
+            ref={inputRef}
+            type="file"
+            className="sr-only"
+            onChange={(e) => e.target.files && pick(e.target.files[0])}
+          />
         </div>
 
         {file && (
@@ -185,7 +236,9 @@ function UploadCard() {
               <FileText className="h-6 w-6 text-indigo-600 shrink-0" />
               <div className="min-w-0 flex-1">
                 <div className="text-sm font-medium truncate">{file.name}</div>
-                <div className="text-xs text-muted-foreground">{(file.size / 1024).toFixed(0)} KB</div>
+                <div className="text-xs text-muted-foreground">
+                  {(file.size / 1024).toFixed(0)} KB
+                </div>
               </div>
               {done && <CheckCircle2 className="h-5 w-5 text-emerald-600" />}
             </div>

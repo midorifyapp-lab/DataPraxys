@@ -19,18 +19,26 @@ function ProfilePage() {
 
       <div className="grid gap-6 lg:grid-cols-3">
         <Card className="shadow-soft">
-          <CardHeader><CardTitle className="text-base">Foto de perfil</CardTitle></CardHeader>
+          <CardHeader>
+            <CardTitle className="text-base">Foto de perfil</CardTitle>
+          </CardHeader>
           <CardContent className="flex flex-col items-center gap-4">
             <Avatar className="h-24 w-24">
-              <AvatarFallback className="bg-gradient-to-br from-indigo-500 to-purple-600 text-white text-2xl font-semibold">JP</AvatarFallback>
+              <AvatarFallback className="bg-gradient-to-br from-indigo-500 to-purple-600 text-white text-2xl font-semibold">
+                JP
+              </AvatarFallback>
             </Avatar>
-            <Button variant="outline" size="sm"><ImagePlus className="h-4 w-4" /> Cambiar foto</Button>
+            <Button variant="outline" size="sm">
+              <ImagePlus className="h-4 w-4" /> Cambiar foto
+            </Button>
           </CardContent>
         </Card>
 
         <div className="lg:col-span-2 space-y-6">
           <Card className="shadow-soft">
-            <CardHeader><CardTitle className="text-base">Contacto</CardTitle></CardHeader>
+            <CardHeader>
+              <CardTitle className="text-base">Contacto</CardTitle>
+            </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-1.5">
                 <Label className="text-xs">Email de contacto</Label>
@@ -43,7 +51,9 @@ function ProfilePage() {
           </Card>
 
           <Card className="shadow-soft">
-            <CardHeader><CardTitle className="text-base">Cambiar contraseña</CardTitle></CardHeader>
+            <CardHeader>
+              <CardTitle className="text-base">Cambiar contraseña</CardTitle>
+            </CardHeader>
             <CardContent className="space-y-4">
               <div className="space-y-1.5">
                 <Label className="text-xs">Contraseña actual</Label>
@@ -60,7 +70,9 @@ function ProfilePage() {
                 </div>
               </div>
               <div className="flex justify-end">
-                <Button onClick={() => toast.success("Contraseña actualizada")}>Actualizar contraseña</Button>
+                <Button onClick={() => toast.success("Contraseña actualizada")}>
+                  Actualizar contraseña
+                </Button>
               </div>
             </CardContent>
           </Card>

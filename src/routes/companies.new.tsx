@@ -30,35 +30,58 @@ function NewCompanyPage() {
     <AppShell>
       <div className="mb-4">
         <Button asChild variant="ghost" size="sm">
-          <Link to="/companies"><ArrowLeft className="h-4 w-4" /> Volver a empresas</Link>
+          <Link to="/companies">
+            <ArrowLeft className="h-4 w-4" /> Volver a empresas
+          </Link>
         </Button>
       </div>
-      <PageHeader title="Nueva empresa" description="Incorpora una nueva empresa socia y su usuario principal." />
+      <PageHeader
+        title="Nueva empresa"
+        description="Incorpora una nueva empresa socia y su usuario principal."
+      />
 
       <form onSubmit={submit} className="grid gap-6 lg:grid-cols-3">
         <div className="lg:col-span-2 space-y-6">
           <Card className="shadow-soft">
-            <CardHeader><CardTitle className="text-base">Datos de la empresa</CardTitle></CardHeader>
+            <CardHeader>
+              <CardTitle className="text-base">Datos de la empresa</CardTitle>
+            </CardHeader>
             <CardContent className="grid gap-4 sm:grid-cols-2">
-              <Field label="Nombre de la empresa" required><Input placeholder="Acme Global" /></Field>
-              <Field label="RUC" required><Input placeholder="20512345678" /></Field>
+              <Field label="Nombre de la empresa" required>
+                <Input placeholder="Acme Global" />
+              </Field>
+              <Field label="RUC" required>
+                <Input placeholder="20512345678" />
+              </Field>
             </CardContent>
           </Card>
 
           <Card className="shadow-soft">
-            <CardHeader><CardTitle className="text-base">Usuario principal</CardTitle></CardHeader>
+            <CardHeader>
+              <CardTitle className="text-base">Usuario principal</CardTitle>
+            </CardHeader>
             <CardContent className="grid gap-4 sm:grid-cols-2">
-              <Field label="Usuario" required><Input placeholder="jperez" /></Field>
-              <Field label="Email" required><Input type="email" placeholder="j.perez@empresa.com" /></Field>
-              <Field label="Cargo"><Input placeholder="Gerente de Finanzas" /></Field>
-              <Field label="Contraseña" required><Input type="password" placeholder="••••••••" /></Field>
+              <Field label="Usuario" required>
+                <Input placeholder="jperez" />
+              </Field>
+              <Field label="Email" required>
+                <Input type="email" placeholder="j.perez@empresa.com" />
+              </Field>
+              <Field label="Cargo">
+                <Input placeholder="Gerente de Finanzas" />
+              </Field>
+              <Field label="Contraseña" required>
+                <Input type="password" placeholder="••••••••" />
+              </Field>
             </CardContent>
           </Card>
         </div>
 
         <div className="space-y-6">
           <Card className="shadow-soft">
-            <CardHeader><CardTitle className="text-base">Logo de la empresa</CardTitle></CardHeader>
+            <CardHeader>
+              <CardTitle className="text-base">Logo de la empresa</CardTitle>
+            </CardHeader>
             <CardContent>
               <label className="flex flex-col items-center justify-center gap-2 border-2 border-dashed rounded-xl p-8 cursor-pointer hover:bg-muted/30 transition-colors">
                 <div className="h-14 w-14 rounded-full bg-indigo-50 grid place-items-center">
@@ -73,8 +96,16 @@ function NewCompanyPage() {
 
           <Card className="shadow-soft">
             <CardContent className="p-4 flex flex-col gap-2">
-              <Button type="submit" disabled={saving}>{saving ? "Creando..." : "Crear empresa"}</Button>
-              <Button type="button" variant="outline" onClick={() => navigate({ to: "/companies" })}>Cancelar</Button>
+              <Button type="submit" disabled={saving}>
+                {saving ? "Creando..." : "Crear empresa"}
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => navigate({ to: "/companies" })}
+              >
+                Cancelar
+              </Button>
             </CardContent>
           </Card>
         </div>
@@ -83,7 +114,15 @@ function NewCompanyPage() {
   );
 }
 
-function Field({ label, required, children }: { label: string; required?: boolean; children: React.ReactNode }) {
+function Field({
+  label,
+  required,
+  children,
+}: {
+  label: string;
+  required?: boolean;
+  children: React.ReactNode;
+}) {
   return (
     <div className="space-y-1.5">
       <Label className="text-xs font-medium">

@@ -4,11 +4,16 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import {
-  Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
 } from "@/components/ui/table";
 import { Search } from "lucide-react";
 import { useState } from "react";
-import { auditLog } from "@/lib/mock-data";
+import { auditLog } from "@/features/audit/mocks/audit.mock";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/audit-log")({
@@ -37,12 +42,20 @@ function AuditLogPage() {
 
   return (
     <AppShell>
-      <PageHeader title="Registro de Auditoría" description="Historial completo de acciones realizadas en tu espacio de trabajo." />
+      <PageHeader
+        title="Registro de Auditoría"
+        description="Historial completo de acciones realizadas en tu espacio de trabajo."
+      />
       <Card className="shadow-soft">
         <div className="p-4 border-b">
           <div className="relative max-w-sm">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-            <Input value={q} onChange={(e) => setQ(e.target.value)} placeholder="Buscar acciones, usuarios, entidades..." className="pl-9" />
+            <Input
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="Buscar acciones, usuarios, entidades..."
+              className="pl-9"
+            />
           </div>
         </div>
         <CardContent className="p-0">
@@ -59,7 +72,9 @@ function AuditLogPage() {
             <TableBody>
               {filtered.map((l) => (
                 <TableRow key={l.id} className="hover:bg-muted/30">
-                  <TableCell className="text-sm text-muted-foreground whitespace-nowrap font-mono text-xs">{l.date}</TableCell>
+                  <TableCell className="text-sm text-muted-foreground whitespace-nowrap font-mono text-xs">
+                    {l.date}
+                  </TableCell>
                   <TableCell className="text-sm">{l.user}</TableCell>
                   <TableCell>
                     <Badge variant="secondary" className={cn("font-medium", actionTones[l.action])}>

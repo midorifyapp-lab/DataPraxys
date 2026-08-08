@@ -24,7 +24,7 @@ Do NOT generate any landing page or marketing pages.
 
 Generate only the authenticated application.
 
-------------------------------------------------
+---
 
 ROLES
 
@@ -36,7 +36,7 @@ There are only two roles:
 
 The application automatically shows the correct dashboard depending on the logged user.
 
-------------------------------------------------
+---
 
 ADMIN APPLICATION
 
@@ -60,7 +60,7 @@ Topbar:
 
 - Profile Menu
 
-------------------------------------------------
+---
 
 ADMIN DASHBOARD
 
@@ -88,7 +88,7 @@ Below create a Recent Activity section showing actions like:
 
 Also include a notification panel showing companies that uploaded new files and require review.
 
-------------------------------------------------
+---
 
 COMPANIES PAGE
 
@@ -128,7 +128,7 @@ Edit
 
 Delete
 
-------------------------------------------------
+---
 
 NEW COMPANY
 
@@ -158,7 +158,7 @@ Cancel
 
 Create Company
 
-------------------------------------------------
+---
 
 COMPANY DETAIL PAGE
 
@@ -216,7 +216,7 @@ Show upload progress
 
 Display success message after upload.
 
-------------------------------------------------
+---
 
 FILE EXCHANGE PAGE
 
@@ -250,7 +250,7 @@ Deleted
 
 Use filters by company and status.
 
-------------------------------------------------
+---
 
 AUDIT LOG
 
@@ -286,7 +286,7 @@ Login
 
 Logout
 
-------------------------------------------------
+---
 
 COMPANY USER APPLICATION
 
@@ -300,7 +300,7 @@ Menu:
 
 - Profile
 
-------------------------------------------------
+---
 
 HOME
 
@@ -326,7 +326,7 @@ Upload Date
 
 Status
 
-------------------------------------------------
+---
 
 MY FILES
 
@@ -350,7 +350,7 @@ Replace button
 
 Delete button
 
-------------------------------------------------
+---
 
 PROFILE
 
@@ -362,7 +362,7 @@ Profile picture
 
 Contact email
 
-------------------------------------------------
+---
 
 NOTIFICATIONS
 
@@ -370,7 +370,7 @@ Administrator receives a notification whenever a company uploads a file.
 
 Show unread notifications in the bell icon.
 
-------------------------------------------------
+---
 
 UX REQUIREMENTS
 

@@ -11,7 +11,7 @@ import { useEffect, type ReactNode } from "react";
 
 import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
-import { AppProvider } from "@/lib/app-state";
+import { AuthProvider } from "@/context/AuthContext";
 import { Toaster } from "@/components/ui/sonner";
 
 function NotFoundComponent() {
@@ -80,22 +80,45 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "Exchange — Transferencia segura de archivos B2B" },
-      { name: "description", content: "Consola premium para intercambiar archivos de forma segura entre tu organización y las empresas socias." },
+      {
+        name: "description",
+        content:
+          "Consola premium para intercambiar archivos de forma segura entre tu organización y las empresas socias.",
+      },
       { name: "author", content: "Exchange" },
       { property: "og:title", content: "Exchange — Transferencia segura de archivos B2B" },
-      { property: "og:description", content: "Consola premium para intercambiar archivos de forma segura entre tu organización y las empresas socias." },
+      {
+        property: "og:description",
+        content:
+          "Consola premium para intercambiar archivos de forma segura entre tu organización y las empresas socias.",
+      },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
       { name: "twitter:title", content: "Exchange — Transferencia segura de archivos B2B" },
-      { name: "twitter:description", content: "Consola premium para intercambiar archivos de forma segura entre tu organización y las empresas socias." },
-      { property: "og:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f7fc4b4c-2dd8-40f7-8625-4337fff80908/id-preview-40fd0057--c483095c-472f-4d6f-90ac-ef0bde1023f0.lovable.app-1784165139858.png" },
-      { name: "twitter:image", content: "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f7fc4b4c-2dd8-40f7-8625-4337fff80908/id-preview-40fd0057--c483095c-472f-4d6f-90ac-ef0bde1023f0.lovable.app-1784165139858.png" },
+      {
+        name: "twitter:description",
+        content:
+          "Consola premium para intercambiar archivos de forma segura entre tu organización y las empresas socias.",
+      },
+      {
+        property: "og:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f7fc4b4c-2dd8-40f7-8625-4337fff80908/id-preview-40fd0057--c483095c-472f-4d6f-90ac-ef0bde1023f0.lovable.app-1784165139858.png",
+      },
+      {
+        name: "twitter:image",
+        content:
+          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/f7fc4b4c-2dd8-40f7-8625-4337fff80908/id-preview-40fd0057--c483095c-472f-4d6f-90ac-ef0bde1023f0.lovable.app-1784165139858.png",
+      },
     ],
     links: [
       { rel: "stylesheet", href: appCss },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
-      { rel: "stylesheet", href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" },
+      {
+        rel: "stylesheet",
+        href: "https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap",
+      },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
   }),
@@ -124,10 +147,10 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <AppProvider>
+      <AuthProvider>
         <Outlet />
         <Toaster position="top-right" richColors />
-      </AppProvider>
+      </AuthProvider>
     </QueryClientProvider>
   );
 }

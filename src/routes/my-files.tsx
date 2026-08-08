@@ -5,8 +5,15 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import {
-  AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
-  AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger,
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { CloudUpload, FileText, Upload, Trash2, RefreshCw, CheckCircle2 } from "lucide-react";
 import { useState, useRef } from "react";
@@ -17,7 +24,12 @@ export const Route = createFileRoute("/my-files")({
   component: MyFilesPage,
 });
 
-interface ActiveFile { name: string; size: number; date: string; status: "available" | "pending" }
+interface ActiveFile {
+  name: string;
+  size: number;
+  date: string;
+  status: "available" | "pending";
+}
 
 function MyFilesPage() {
   const [drag, setDrag] = useState(false);
@@ -39,7 +51,12 @@ function MyFilesPage() {
       setProgress(Math.min(p, 100));
       if (p >= 100) {
         clearInterval(t);
-        setFile({ name: f.name, size: f.size, date: new Date().toISOString().slice(0, 16).replace("T", " "), status: "available" });
+        setFile({
+          name: f.name,
+          size: f.size,
+          date: new Date().toISOString().slice(0, 16).replace("T", " "),
+          status: "available",
+        });
         setProgress(0);
         toast.success("Archivo subido correctamente");
       }
@@ -53,14 +70,22 @@ function MyFilesPage() {
 
   return (
     <AppShell>
-      <PageHeader title="Mis Archivos" description="Sube el archivo actual que quieres compartir con el administrador." />
+      <PageHeader
+        title="Mis Archivos"
+        description="Sube el archivo actual que quieres compartir con el administrador."
+      />
 
       <div className="grid gap-6 lg:grid-cols-3">
         <Card className="shadow-soft lg:col-span-2">
-          <CardHeader><CardTitle className="text-base">Subir archivo</CardTitle></CardHeader>
+          <CardHeader>
+            <CardTitle className="text-base">Subir archivo</CardTitle>
+          </CardHeader>
           <CardContent>
             <div
-              onDragOver={(e) => { e.preventDefault(); setDrag(true); }}
+              onDragOver={(e) => {
+                e.preventDefault();
+                setDrag(true);
+              }}
               onDragLeave={() => setDrag(false)}
               onDrop={(e) => {
                 e.preventDefault();
@@ -78,12 +103,22 @@ function MyFilesPage() {
                 <CloudUpload className="h-7 w-7 text-white" />
               </div>
               <div className="text-base font-semibold">Arrastra tu archivo aquí</div>
-              <div className="text-sm text-muted-foreground mt-1">o haz clic para explorar — hasta 50MB</div>
-              <input ref={inputRef} type="file" className="sr-only" onChange={(e) => e.target.files && handlePick(e.target.files[0])} />
+              <div className="text-sm text-muted-foreground mt-1">
+                o haz clic para explorar — hasta 50MB
+              </div>
+              <input
+                ref={inputRef}
+                type="file"
+                className="sr-only"
+                onChange={(e) => e.target.files && handlePick(e.target.files[0])}
+              />
             </div>
             {progress > 0 && (
               <div className="mt-4 space-y-2">
-                <div className="flex justify-between text-xs text-muted-foreground"><span>Subiendo...</span><span>{progress}%</span></div>
+                <div className="flex justify-between text-xs text-muted-foreground">
+                  <span>Subiendo...</span>
+                  <span>{progress}%</span>
+                </div>
                 <Progress value={progress} />
               </div>
             )}
@@ -105,12 +140,16 @@ function MyFilesPage() {
                     <FileText className="h-8 w-8 text-indigo-600" />
                     <div className="min-w-0 flex-1">
                       <div className="text-sm font-medium truncate">{file.name}</div>
-                      <div className="text-xs text-muted-foreground">{(file.size / 1024).toFixed(0)} KB</div>
+                      <div className="text-xs text-muted-foreground">
+                        {(file.size / 1024).toFixed(0)} KB
+                      </div>
                     </div>
                   </div>
                   <div className="flex items-center justify-between text-xs text-muted-foreground">
                     <span>Subido {file.date}</span>
-                    <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100">Disponible</Badge>
+                    <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100">
+                      Disponible
+                    </Badge>
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-2">
@@ -119,16 +158,27 @@ function MyFilesPage() {
                   </Button>
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
-                      <Button variant="outline" size="sm" className="text-destructive"><Trash2 className="h-4 w-4" /> Eliminar</Button>
+                      <Button variant="outline" size="sm" className="text-destructive">
+                        <Trash2 className="h-4 w-4" /> Eliminar
+                      </Button>
                     </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
                         <AlertDialogTitle>¿Eliminar este archivo?</AlertDialogTitle>
-                        <AlertDialogDescription>El administrador ya no podrá ver este archivo.</AlertDialogDescription>
+                        <AlertDialogDescription>
+                          El administrador ya no podrá ver este archivo.
+                        </AlertDialogDescription>
                       </AlertDialogHeader>
                       <AlertDialogFooter>
                         <AlertDialogCancel>Cancelar</AlertDialogCancel>
-                        <AlertDialogAction onClick={() => { setFile(null); toast.success("Archivo eliminado"); }}>Eliminar</AlertDialogAction>
+                        <AlertDialogAction
+                          onClick={() => {
+                            setFile(null);
+                            toast.success("Archivo eliminado");
+                          }}
+                        >
+                          Eliminar
+                        </AlertDialogAction>
                       </AlertDialogFooter>
                     </AlertDialogContent>
                   </AlertDialog>
@@ -149,12 +199,19 @@ function MyFilesPage() {
           <AlertDialogHeader>
             <AlertDialogTitle>¿Reemplazar el archivo actual?</AlertDialogTitle>
             <AlertDialogDescription>
-              Solo se permite un archivo activo. Subir <span className="font-medium">{pendingReplace?.name}</span> reemplazará tu archivo actual.
+              Solo se permite un archivo activo. Subir{" "}
+              <span className="font-medium">{pendingReplace?.name}</span> reemplazará tu archivo
+              actual.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancelar</AlertDialogCancel>
-            <AlertDialogAction onClick={() => { if (pendingReplace) startUpload(pendingReplace); setPendingReplace(null); }}>
+            <AlertDialogAction
+              onClick={() => {
+                if (pendingReplace) startUpload(pendingReplace);
+                setPendingReplace(null);
+              }}
+            >
               Reemplazar
             </AlertDialogAction>
           </AlertDialogFooter>

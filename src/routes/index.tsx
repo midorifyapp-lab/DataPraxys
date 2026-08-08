@@ -1,14 +1,29 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { AppShell, PageHeader, CompanyLogo } from "@/components/app-shell";
-import { useApp } from "@/lib/app-state";
+import { useAuth } from "@/context/AuthContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
-  Building2, Download, Upload, Clock, FileText, TrendingUp, Users,
-  Send, ArrowUpRight, Inbox, CheckCircle2,
+  Building2,
+  Download,
+  Upload,
+  Clock,
+  FileText,
+  TrendingUp,
+  Users,
+  Send,
+  ArrowUpRight,
+  Inbox,
+  CheckCircle2,
 } from "lucide-react";
-import { companies, files, activity, notifications } from "@/lib/mock-data";
+import { companies } from "@/features/companies/mocks/companies.mock";
+import { files } from "@/features/exchange/mocks/exchange.mock";
+import { activity } from "@/features/activity/mocks/activity.mock";
+import { notifications } from "@/features/notifications/mocks/notifications.mock";
+import { FileRecord } from "@/features/exchange/types";
+import { ActivityItem } from "@/features/activity/types";
+import { AppNotification } from "@/features/notifications/types";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({
@@ -16,21 +31,33 @@ export const Route = createFileRoute("/")({
 });
 
 function IndexPage() {
-  const { role } = useApp();
+  const { role } = useAuth();
   return <AppShell>{role === "admin" ? <AdminDashboard /> : <CompanyHome />}</AppShell>;
 }
 
 /* ---------------- PANEL ADMIN ---------------- */
 
 function StatCard({
-  label, value, delta, icon: Icon, tone,
-}: { label: string; value: string; delta: string; icon: any; tone: string }) {
+  label,
+  value,
+  delta,
+  icon: Icon,
+  tone,
+}: {
+  label: string;
+  value: string;
+  delta: string;
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+  tone: string;
+}) {
   return (
     <Card className="shadow-soft border-border/60">
       <CardContent className="p-5">
         <div className="flex items-start justify-between">
           <div>
-            <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide">{label}</div>
+            <div className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+              {label}
+            </div>
             <div className="mt-2 text-3xl font-semibold tracking-tight">{value}</div>
             <div className="mt-2 flex items-center gap-1 text-xs text-emerald-600">
               <TrendingUp className="h-3 w-3" /> {delta}
@@ -54,19 +81,47 @@ function AdminDashboard() {
         description="Resumen de la actividad de intercambio de archivos entre todas las empresas."
         actions={
           <>
-            <Button variant="outline" size="sm">Exportar</Button>
+            <Button variant="outline" size="sm">
+              Exportar
+            </Button>
             <Button asChild size="sm">
-              <Link to="/companies/new"><Users className="h-4 w-4" /> Nueva empresa</Link>
+              <Link to="/companies/new">
+                <Users className="h-4 w-4" /> Nueva empresa
+              </Link>
             </Button>
           </>
         }
       />
 
       <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <StatCard label="Total de empresas" value={String(companies.length)} delta="+2 este mes" icon={Building2} tone="bg-indigo-50 text-indigo-600" />
-        <StatCard label="Archivos recibidos" value="128" delta="+12% vs semana pasada" icon={Inbox} tone="bg-emerald-50 text-emerald-600" />
-        <StatCard label="Archivos enviados" value="94" delta="+8% vs semana pasada" icon={Send} tone="bg-blue-50 text-blue-600" />
-        <StatCard label="Entregas pendientes" value="6" delta="2 requieren acción" icon={Clock} tone="bg-amber-50 text-amber-600" />
+        <StatCard
+          label="Total de empresas"
+          value={String(companies.length)}
+          delta="+2 este mes"
+          icon={Building2}
+          tone="bg-indigo-50 text-indigo-600"
+        />
+        <StatCard
+          label="Archivos recibidos"
+          value="128"
+          delta="+12% vs semana pasada"
+          icon={Inbox}
+          tone="bg-emerald-50 text-emerald-600"
+        />
+        <StatCard
+          label="Archivos enviados"
+          value="94"
+          delta="+8% vs semana pasada"
+          icon={Send}
+          tone="bg-blue-50 text-blue-600"
+        />
+        <StatCard
+          label="Entregas pendientes"
+          value="6"
+          delta="2 requieren acción"
+          icon={Clock}
+          tone="bg-amber-50 text-amber-600"
+        />
       </div>
 
       <div className="mt-6 grid gap-6 lg:grid-cols-3">
@@ -74,14 +129,21 @@ function AdminDashboard() {
           <CardHeader className="flex-row items-center justify-between space-y-0">
             <div>
               <CardTitle className="text-base">Actividad reciente</CardTitle>
-              <p className="text-xs text-muted-foreground mt-0.5">Últimos eventos en tu espacio de trabajo</p>
+              <p className="text-xs text-muted-foreground mt-0.5">
+                Últimos eventos en tu espacio de trabajo
+              </p>
             </div>
-            <Button variant="ghost" size="sm">Ver todo</Button>
+            <Button variant="ghost" size="sm">
+              Ver todo
+            </Button>
           </CardHeader>
           <CardContent className="pt-0">
             <ul className="divide-y">
-              {activity.map((a) => {
-                const iconMap: any = {
+              {activity.map((a: ActivityItem) => {
+                const iconMap: Record<
+                  ActivityItem["type"],
+                  { icon: React.ComponentType<React.SVGProps<SVGSVGElement>>; tone: string }
+                > = {
                   upload: { icon: Upload, tone: "bg-emerald-50 text-emerald-600" },
                   send: { icon: Send, tone: "bg-blue-50 text-blue-600" },
                   download: { icon: Download, tone: "bg-slate-100 text-slate-600" },
@@ -151,14 +213,17 @@ function AdminDashboard() {
 /* ---------------- INICIO EMPRESA ---------------- */
 
 function CompanyHome() {
-  const { currentCompanyId } = useApp();
+  const { currentCompanyId } = useAuth();
   const company = companies.find((c) => c.id === currentCompanyId)!;
   const received = files.filter((f) => f.companyId === company.id && f.direction === "sent")[0];
   const uploaded = files.filter((f) => f.companyId === company.id && f.direction === "received")[0];
 
   return (
     <>
-      <PageHeader title={`Bienvenido, ${company.username}`} description="Un resumen de tu actividad reciente de archivos." />
+      <PageHeader
+        title={`Bienvenido, ${company.username}`}
+        description="Un resumen de tu actividad reciente de archivos."
+      />
 
       <Card className="shadow-soft mb-6 overflow-hidden">
         <div className="h-24 bg-gradient-to-br from-indigo-500 via-purple-500 to-pink-500" />
@@ -167,7 +232,9 @@ function CompanyHome() {
             <CompanyLogo initials={company.logo} id={company.id} size="lg" />
             <div className="pb-1">
               <div className="text-lg font-semibold">{company.name}</div>
-              <div className="text-sm text-muted-foreground">RUC {company.ruc} · {company.email}</div>
+              <div className="text-sm text-muted-foreground">
+                RUC {company.ruc} · {company.email}
+              </div>
             </div>
             <div className="ml-auto">
               <Badge className="bg-emerald-100 text-emerald-700 hover:bg-emerald-100">Activa</Badge>
@@ -190,10 +257,14 @@ function CompanyHome() {
                   <FileText className="h-8 w-8 text-indigo-600" />
                   <div className="min-w-0 flex-1">
                     <div className="text-sm font-medium truncate">{received.filename}</div>
-                    <div className="text-xs text-muted-foreground">Recibido {received.sentDate}</div>
+                    <div className="text-xs text-muted-foreground">
+                      Recibido {received.sentDate}
+                    </div>
                   </div>
                 </div>
-                <Button className="w-full"><Download className="h-4 w-4" /> Descargar</Button>
+                <Button className="w-full">
+                  <Download className="h-4 w-4" /> Descargar
+                </Button>
               </div>
             ) : (
               <EmptyMini icon={Inbox} text="Aún no se ha recibido ningún archivo" />
@@ -232,7 +303,13 @@ function CompanyHome() {
   );
 }
 
-function EmptyMini({ icon: Icon, text }: { icon: any; text: string }) {
+function EmptyMini({
+  icon: Icon,
+  text,
+}: {
+  icon: React.ComponentType<React.SVGProps<SVGSVGElement>>;
+  text: string;
+}) {
   return (
     <div className="text-center py-8 text-sm text-muted-foreground">
       <Icon className="h-10 w-10 mx-auto mb-2 opacity-40" />

@@ -15,11 +15,16 @@ export const Route = createFileRoute("/settings")({
 function SettingsPage() {
   return (
     <AppShell>
-      <PageHeader title="Configuración" description="Administra las preferencias y opciones de seguridad de tu espacio de trabajo." />
+      <PageHeader
+        title="Configuración"
+        description="Administra las preferencias y opciones de seguridad de tu espacio de trabajo."
+      />
 
       <div className="grid gap-6 max-w-3xl">
         <Card className="shadow-soft">
-          <CardHeader><CardTitle className="text-base">Espacio de trabajo</CardTitle></CardHeader>
+          <CardHeader>
+            <CardTitle className="text-base">Espacio de trabajo</CardTitle>
+          </CardHeader>
           <CardContent className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-1.5">
               <Label className="text-xs">Nombre del espacio</Label>
@@ -33,7 +38,9 @@ function SettingsPage() {
         </Card>
 
         <Card className="shadow-soft">
-          <CardHeader><CardTitle className="text-base">Notificaciones</CardTitle></CardHeader>
+          <CardHeader>
+            <CardTitle className="text-base">Notificaciones</CardTitle>
+          </CardHeader>
           <CardContent className="space-y-4">
             <Toggle title="Enviarme un email cuando una empresa suba un archivo" defaultOn />
             <Separator />
@@ -44,7 +51,9 @@ function SettingsPage() {
         </Card>
 
         <Card className="shadow-soft">
-          <CardHeader><CardTitle className="text-base">Seguridad</CardTitle></CardHeader>
+          <CardHeader>
+            <CardTitle className="text-base">Seguridad</CardTitle>
+          </CardHeader>
           <CardContent className="space-y-4">
             <Toggle title="Requerir 2FA para administradores" defaultOn />
             <Separator />

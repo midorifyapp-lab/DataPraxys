@@ -9,34 +9,19 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SettingsRouteImport } from './routes/settings'
-import { Route as ProfileRouteImport } from './routes/profile'
-import { Route as MyFilesRouteImport } from './routes/my-files'
-import { Route as FileExchangeRouteImport } from './routes/file-exchange'
-import { Route as AuditLogRouteImport } from './routes/audit-log'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuditLogRouteImport } from './routes/audit-log'
+import { Route as FileExchangeRouteImport } from './routes/file-exchange'
+import { Route as MyFilesRouteImport } from './routes/my-files'
+import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as CompaniesIndexRouteImport } from './routes/companies.index'
-import { Route as CompaniesNewRouteImport } from './routes/companies.new'
 import { Route as CompaniesIdRouteImport } from './routes/companies.$id'
+import { Route as CompaniesNewRouteImport } from './routes/companies.new'
 
-const SettingsRoute = SettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ProfileRoute = ProfileRouteImport.update({
-  id: '/profile',
-  path: '/profile',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MyFilesRoute = MyFilesRouteImport.update({
-  id: '/my-files',
-  path: '/my-files',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const FileExchangeRoute = FileExchangeRouteImport.update({
-  id: '/file-exchange',
-  path: '/file-exchange',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const AuditLogRoute = AuditLogRouteImport.update({
@@ -44,9 +29,24 @@ const AuditLogRoute = AuditLogRouteImport.update({
   path: '/audit-log',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const FileExchangeRoute = FileExchangeRouteImport.update({
+  id: '/file-exchange',
+  path: '/file-exchange',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const MyFilesRoute = MyFilesRouteImport.update({
+  id: '/my-files',
+  path: '/my-files',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProfileRoute = ProfileRouteImport.update({
+  id: '/profile',
+  path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const CompaniesIndexRoute = CompaniesIndexRouteImport.update({
@@ -54,14 +54,14 @@ const CompaniesIndexRoute = CompaniesIndexRouteImport.update({
   path: '/companies/',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CompaniesNewRoute = CompaniesNewRouteImport.update({
-  id: '/companies/new',
-  path: '/companies/new',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const CompaniesIdRoute = CompaniesIdRouteImport.update({
   id: '/companies/$id',
   path: '/companies/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CompaniesNewRoute = CompaniesNewRouteImport.update({
+  id: '/companies/new',
+  path: '/companies/new',
   getParentRoute: () => rootRouteImport,
 } as any)
 
@@ -149,32 +149,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/settings': {
-      id: '/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof SettingsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/profile': {
-      id: '/profile'
-      path: '/profile'
-      fullPath: '/profile'
-      preLoaderRoute: typeof ProfileRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/my-files': {
-      id: '/my-files'
-      path: '/my-files'
-      fullPath: '/my-files'
-      preLoaderRoute: typeof MyFilesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/file-exchange': {
-      id: '/file-exchange'
-      path: '/file-exchange'
-      fullPath: '/file-exchange'
-      preLoaderRoute: typeof FileExchangeRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/audit-log': {
@@ -184,11 +163,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuditLogRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/file-exchange': {
+      id: '/file-exchange'
+      path: '/file-exchange'
+      fullPath: '/file-exchange'
+      preLoaderRoute: typeof FileExchangeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/my-files': {
+      id: '/my-files'
+      path: '/my-files'
+      fullPath: '/my-files'
+      preLoaderRoute: typeof MyFilesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/profile': {
+      id: '/profile'
+      path: '/profile'
+      fullPath: '/profile'
+      preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/companies/': {
@@ -198,18 +198,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof CompaniesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/companies/new': {
-      id: '/companies/new'
-      path: '/companies/new'
-      fullPath: '/companies/new'
-      preLoaderRoute: typeof CompaniesNewRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/companies/$id': {
       id: '/companies/$id'
       path: '/companies/$id'
       fullPath: '/companies/$id'
       preLoaderRoute: typeof CompaniesIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/companies/new': {
+      id: '/companies/new'
+      path: '/companies/new'
+      fullPath: '/companies/new'
+      preLoaderRoute: typeof CompaniesNewRouteImport
       parentRoute: typeof rootRouteImport
     }
   }
@@ -229,3 +229,13 @@ const rootRouteChildren: RootRouteChildren = {
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { startInstance } from './start.ts'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+    config: Awaited<ReturnType<typeof startInstance.getOptions>>
+  }
+}
